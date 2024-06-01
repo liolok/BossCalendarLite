@@ -1,0 +1,14 @@
+Calculate and remember when bosses respawn, with click-announcing and auto-reminding.
+
+By default, press and hold "V" to view the calendar.
+
+Change unit and style to your preference in mod settings.
+
+[h2]Credits[/h2]
+[list]
+    [*]Boas: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]original author[/url]
+    [*]xaT2x: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]second contributor[/url]
+    [*]iaman2b: images rework, test
+[/list]
+[hr][/hr] 
+[url=https://github.com/liolok/BossCalendarLite]Source code[/url]

@@ -1,0 +1,14 @@
+帮你计算并记住 Boss 们什么时候刷新，支持点击宣告、自动提醒。
+
+默认绑定 V 键，按住查看日历。
+
+可以在模组设置里调整刷新时间的单位和风格。
+
+[h2]致谢[/h2]
+[list]
+    [*]Boas：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]原作者[/url]
+    [*]xaT2x：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]第二任维护者[/url]
+    [*]iaman2b: 贴图素材重做、测试
+[/list]
+[hr][/hr] 
+[url=https://github.com/liolok/BossCalendarLite]源码[/url]
