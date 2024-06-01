@@ -5,7 +5,7 @@ icon_atlas = "modicon.xml"
 icon = "modicon.tex"
 
 author = "Boas (Altered by xaT2x) (Altered by iaman2b & liolok)"
-version = "1.1.20240601"
+version = "2024.06.01.1"
 
 dont_starve_compatible = false
 reign_of_giants_compatible = false
