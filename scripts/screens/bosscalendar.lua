@@ -1,0 +1,329 @@
+local Screen = require "widgets/screen"
+local Widget = require "widgets/widget"
+local Text = require "widgets/text"
+local Image = require "widgets/image"
+local Talker = require "components/talker"
+
+require "bosscalendar/constants"
+local Announcer = require "bosscalendar/announcer"
+local PersistentData = require "bosscalendar/persistentdata"
+
+local BossCalendar = Class(Screen)
+local Data = PersistentData("BossCalendarLite")
+local session_id -- will get before loading data in BossCalendar:Load()
+
+local CONFIG = {} -- will fill in BossCalendar:Init()
+local timestamp = {} -- will fill in BossCalendar:Load()
+for _, boss in pairs(BOSS) do
+    timestamp[boss] = {
+        defeat = nil, -- when did player killed/defeat this boss
+        respawn = nil, -- when will this boss respawn
+    }
+end
+-- will load in BossCalendar:Load(), "at first" werepig is in cavejail
+local is_werepig_in_forestjunkpile = false
+
+-- Helper
+
+-- count of seconds the world has run till now
+local function SecondsNow() return (TheWorld.state.cycles + TheWorld.state.time) * TUNING.TOTAL_DAY_TIME end
+
+function GetName(boss)
+    if is_werepig_in_forestjunkpile then boss = boss:gsub("daywalker$", "daywalker2") end
+    return INFO[boss].NAME
+end
+
+local function AbsoluteGameDay(boss, announce)
+    local str = string.format("%.1f", 1 + (timestamp[boss].respawn / TUNING.TOTAL_DAY_TIME))
+    return announce and string.format("%s should be ready on day %s", GetName(boss), str) or "Day "..str
+end
+
+local function CountdownGameDays(boss, announce)
+    local delta = math.max(0, timestamp[boss].respawn - SecondsNow())
+    local str = string.format("%.1f", delta / TUNING.TOTAL_DAY_TIME)
+    local num = tonumber(str)
+
+    if announce then
+        local days = str..(num > 1 and " days" or " day")
+        return string.format("%s should be ready in %s.", GetName(boss), days)
+    else
+        return str.."d"
+    end
+end
+
+local function CountdownRealTime(boss, announce)
+    local delta = math.max(0, timestamp[boss].respawn - SecondsNow())
+
+    local hour = math.floor(delta / 3600)
+    local minute = math.floor(delta % 3600 / 60)
+    local str = ""
+
+    if hour >= 1 then
+        local suffix = not announce and "h" or hour == 1 and " hour" or " hours"
+        str = hour..suffix
+    end
+
+    if minute >= 1 then
+        local separator = str == "" and "" or " "
+        local suffix = not announce and "m" or minute == 1 and " minute" or " minutes"
+        str = str..separator..minute..suffix
+    end
+
+    if hour < 1 and minute < 1 then
+        local second = math.ceil(delta)
+        local suffix = not announce and "s" or second == 1 and " second" or " seconds"
+        str = second..suffix
+    end
+
+    return announce and string.format("%s should be ready in %s.", GetName(boss), str) or str
+end
+
+local function OnTimerDone(inst, data)
+    if not type(data) == "table" or not data.name or not timestamp[data.name].respawn then return end
+
+    local boss = data.name
+    timestamp[boss].respawn = nil
+    BossCalendar:Save()
+    BossCalendar:Say(GetName(boss).." should be ready.", CONFIG.REMINDER_DURATION or 5)
+end
+
+local search_cd = {} -- cooldown
+local function SearchBossByDrop(inst)
+    local drop = inst.prefab
+    if search_cd[drop] then return nil end
+
+    search_cd[drop] = ThePlayer:DoTaskInTime(3, function() search_cd[drop] = nil end)
+
+    return FindEntity(inst, 15, nil, {"epic"})
+end
+
+local function CheckDaywalkerAround()
+    local x, y, z = ThePlayer.Transform:GetWorldPosition()
+    local entities = TheSim:FindEntities(x, y, z, 80, {"epic"})
+    if not entities then return end
+
+    local daywalker_defeat = is_werepig_in_forestjunkpile and "daywalker" or "daywalker2"
+    for _, entity in ipairs(entities) do if entity.prefab == daywalker_defeat then
+        local interval = INFO["daywalker"].RESPAWN_INTERVAL
+        timestamp["daywalker"].respawn = SecondsNow() + interval
+        ThePlayer.components.timer:SetTimeLeft("daywalker", interval)
+        BossCalendar:Say(INFO[daywalker_defeat].NAME.." is still around, respawn will delay one day.", 10)
+        BossCalendar:Save(); break
+    end end
+end
+
+local function OnAnnounce(boss)
+    local message = string.format("%s should be ready.", GetName(boss))
+
+    if timestamp[boss].respawn then
+        message = CountdownRealTime(boss, true)
+        if CONFIG.ANNOUNCE_UNIT then
+            message = CONFIG.ANNOUNCE_STYLE and AbsoluteGameDay(boss, true) or CountdownGameDays(boss, true)
+        end
+    end
+
+    Announcer:Announce(message, boss)
+end
+
+-- Reminder
+
+function BossCalendar:Say(message, duration)
+    if self.talking then return end
+
+    self.talking = true
+    ThePlayer.components.talker.lineduration = duration
+    ThePlayer.components.talker:Say(message, duration, 0, true, false, CONFIG.REMINDER_COLOR)
+    ThePlayer.components.talker.Say = function() end
+    ThePlayer:DoTaskInTime(duration, function()
+        ThePlayer.components.talker.lineduration = 2.5
+        ThePlayer.components.talker.Say = Talker.Say
+        self.talking = false
+    end)
+end
+
+-- Persistant Data
+
+function BossCalendar:Save()
+    Data:SetValue(session_id.."_timestamp", timestamp)
+    Data:SetValue(session_id.."_is_next_daywalker_2", is_werepig_in_forestjunkpile)
+    Data:Save()
+    self:Update()
+end
+
+function BossCalendar:Load()
+    Data:Load()
+    session_id = tostring(TheWorld.net.components.shardstate:GetMasterSessionId())
+    is_werepig_in_forestjunkpile = Data:GetValue(session_id.."_is_next_daywalker_2")
+    local timestamp_data = Data:GetValue(session_id.."_timestamp")
+    if not timestamp_data then self.init = true; return end
+
+    local respawned = {} -- bosses respawned during absence
+
+    for _, boss in pairs(BOSS) do
+        if timestamp_data[boss] then
+            timestamp[boss] = timestamp_data[boss]
+            if timestamp[boss].defeat and timestamp[boss].defeat > SecondsNow() then
+                timestamp[boss].defeat = nil
+                timestamp[boss].respawn = nil
+                self:Save()
+            end
+            if timestamp[boss].respawn then
+                local delta = timestamp[boss].respawn - SecondsNow()
+                if delta > 0 then -- not respawned yet
+                    ThePlayer.components.timer:StartTimer(boss, delta)
+                else -- already respawned during absence
+                    timestamp[boss].respawn = nil
+                    table.insert(respawned, GetName(boss))
+                end
+            end
+        end
+    end
+
+    if #respawned > 0 then -- absence respawn reminder
+        ThePlayer:DoTaskInTime(5, function()
+            local separator = #respawned == 2 and " and " or ", "
+            local bosses = table.concat(respawned, separator)
+            local have = #respawned >= 2 and " have" or " has"
+            local duration = CONFIG.REMINDER_DURATION or 5
+            self:Say(bosses..have.." already respawned.", duration)
+            self:Save()
+        end)
+    end
+
+    self.init = true
+end
+
+-- General
+
+function BossCalendar:Init(inst, configuration)
+    ThePlayer:AddComponent("timer")
+    ThePlayer:ListenForEvent("timerdone", OnTimerDone)
+    CONFIG = configuration
+    self.talking = false
+    self:Load()
+end
+
+function BossCalendar:ValidateDefeatByDrop(inst)
+    local entity = SearchBossByDrop(inst)
+    if not entity or not entity:IsValid() then return end
+
+    local boss = BOSS_BY_DROP[inst.prefab]
+    for _, anim in pairs(INFO[boss].ANIMS) do
+        if entity.AnimState:IsCurrentAnimation(anim) then
+            self:OnDefeat(boss); break
+        end
+    end
+end
+
+function BossCalendar:OnDefeat(boss)
+    if not self.init then return end
+    if timestamp[boss:gsub("%d", "")].respawn then return end -- remove 2 from daywalker2
+    if boss == "klaus" and not IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) then return end
+
+    local interval = INFO[boss].RESPAWN_INTERVAL
+
+    if boss:find("daywalker") then -- daywalker or daywalker2
+        -- Nightmare Werepig is killed in cave this time, 
+        -- next time it will respawn in big junk pile on forest.
+        is_werepig_in_forestjunkpile = (boss == "daywalker")
+        -- Check if daywalker is still around player when next day coming
+        local time_left_today = (1 - TheWorld.state.time) * TUNING.TOTAL_DAY_TIME
+        ThePlayer:DoTaskInTime(time_left_today, CheckDaywalkerAround)
+        -- regard two variants as one same boss
+        boss = "daywalker"
+        -- subtract time spent on current day
+        interval = interval - (TheWorld.state.time * TUNING.TOTAL_DAY_TIME)
+    end
+
+    ThePlayer.components.timer:StartTimer(boss, interval)
+    timestamp[boss].defeat = SecondsNow()
+    timestamp[boss].respawn = SecondsNow() + interval
+    self:Save()
+end
+
+-- GUI
+
+function BossCalendar:Close()
+    if not self.open then return end
+
+    TheFrontEnd:PopScreen(self)
+    self.open = false
+end
+
+function BossCalendar:Open()
+    if self.open or not self.init then return end
+
+    Screen._ctor(self, "Boss Calendar")
+    self.open = true
+
+    if self.black then self.black:Kill() end
+    self.black = self:AddChild(Image("images/global.xml", "square.tex"))
+    self.black:SetSize(RESOLUTION_X + 4, RESOLUTION_Y + 4)
+    self.black:SetVRegPoint(ANCHOR_MIDDLE)
+    self.black:SetHRegPoint(ANCHOR_MIDDLE)
+    self.black:SetVAnchor(ANCHOR_MIDDLE)
+    self.black:SetHAnchor(ANCHOR_MIDDLE)
+    self.black:SetScaleMode(SCALEMODE_FIXEDPROPORTIONAL)
+    self.black:SetTint(0, 0, 0, 0)
+
+    if self.root then self.root:Kill() end
+    self.root = self:AddChild(Widget("ROOT"))
+    self.root:SetScaleMode(SCALEMODE_PROPORTIONAL)
+    self.root:SetHAnchor(ANCHOR_MIDDLE)
+    self.root:SetVAnchor(ANCHOR_MIDDLE)
+
+    if self.bg then self.bg:Kill() end
+    self.bg = self.root:AddChild(Image("images/scoreboard.xml", "scoreboard_frame.tex"))
+    self.bg:SetScale(.7, .7)
+
+    if self.title then self.title:Kill() end
+    self.title = self.root:AddChild(Text(TITLEFONT, 48))
+    self.title:SetColour(1, 1, 1, 1)
+    self.title:SetPosition(0, 150)
+    self.title:SetString("Boss Calendar")
+
+    for index, boss in pairs(BOSS) do
+        local x = (index - 1) % 5 * 120 - 240
+        local y = math.floor((index - 1) / 5) * (-130)
+        local txt, img = boss.."_txt", boss.."_img"
+        self[txt] = self.root:AddChild(Text(UIFONT, 32))
+        self[txt]:SetPosition(x, y + 80)
+        self[txt]:SetString(GetName(boss))
+        self[img] = self.root:AddChild(Image("images/boss.xml", boss..".tex"))
+        self[img]:SetSize(68, 68)
+        self[img]:SetPosition(x, y + 30)
+        self[img].OnMouseButton = function(_, button, down)
+            if button == 1000 and down then OnAnnounce(boss) end -- Left Mounse Button
+        end
+    end
+
+    self:Update()
+
+    return true
+end
+
+function BossCalendar:Update()
+    if not self.open or not self.init then return end
+
+    for _, boss in pairs(BOSS) do
+        local txt, img = boss.."_txt", boss.."_img"
+        if timestamp[boss].respawn then -- display respawn information
+            self[img]:SetTint(0, 0, 0, 1) -- black image for respawning
+            self[txt]:SetColour(1, 0, 0, 1) -- red for all other bosses
+            if boss == "daywalker" and is_werepig_in_forestjunkpile then
+                self[txt]:SetColour(1, 0.5, 0, 1) -- orange for Scrappy Werepig
+            end
+            local str = CountdownRealTime(boss)
+            if CONFIG.CALENDAR_UNIT then
+                str = CONFIG.CALENDAR_STYLE and AbsoluteGameDay(boss) or CountdownGameDays(boss) 
+            end
+            self[txt]:SetString(str)
+        else -- display boss name
+            self[img]:SetTint(1, 1, 1, 1)
+            self[txt]:SetColour(1, 1, 1, 1)
+            self[txt]:SetString(GetName(boss))
+        end
+    end
+end
+
+return BossCalendar
