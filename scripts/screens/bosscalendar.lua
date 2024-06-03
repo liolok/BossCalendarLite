@@ -28,26 +28,32 @@ local is_werepig_in_forestjunkpile = false
 -- count of seconds the world has run till now
 local function SecondsNow() return (TheWorld.state.cycles + TheWorld.state.time) * TUNING.TOTAL_DAY_TIME end
 
-function GetName(boss)
+local function GetName(boss)
     if is_werepig_in_forestjunkpile then boss = boss:gsub("daywalker$", "daywalker2") end
     return STRINGS.NAMES[boss:upper()]
 end
 
+local function FMT(s, boss, time)
+    local tab = {}
+    if boss then tab.boss = GetName(boss) end
+    if time then tab.time = time end
+    return subfmt(s, tab)
+end
+
 local function AbsoluteGameDay(boss, announce)
-    local str = string.format("%.1f", 1 + (timestamp[boss].respawn / TUNING.TOTAL_DAY_TIME))
-    return announce and string.format("%s should be ready on day %s", GetName(boss), str) or "Day "..str
+    local time = string.format("%.1f", 1 + (timestamp[boss].respawn / TUNING.TOTAL_DAY_TIME))
+    return announce and FMT(STRINGS.BCL.AGD.LONG, boss, time) or FMT(STRINGS.BCL.AGD.SHORT, nil, time)
 end
 
 local function CountdownGameDays(boss, announce)
     local delta = math.max(0, timestamp[boss].respawn - SecondsNow())
-    local str = string.format("%.1f", delta / TUNING.TOTAL_DAY_TIME)
-    local num = tonumber(str)
+    local time = string.format("%.1f", delta / TUNING.TOTAL_DAY_TIME)
 
     if announce then
-        local days = str..(num > 1 and " days" or " day")
-        return string.format("%s should be ready in %s.", GetName(boss), days)
+        local time = time..(tonumber(time) == 1 and STRINGS.BCL.DAY or STRINGS.BCL.DAYS)
+        return FMT(STRINGS.BCL.CGD.LONG, boss, time)
     else
-        return str.."d"
+        return FMT(STRINGS.BCL.CGD.SHORT, nil, time)
     end
 end
 
@@ -56,26 +62,26 @@ local function CountdownRealTime(boss, announce)
 
     local hour = math.floor(delta / 3600)
     local minute = math.floor(delta % 3600 / 60)
-    local str = ""
+    local time = ""
 
     if hour >= 1 then
-        local suffix = not announce and "h" or hour == 1 and " hour" or " hours"
-        str = hour..suffix
+        local suffix = not announce and STRINGS.BCL.H or hour == 1 and STRINGS.BCL.HOUR or STRINGS.BCL.HOURS
+        time = hour..suffix
     end
 
     if minute >= 1 then
-        local separator = str == "" and "" or " "
-        local suffix = not announce and "m" or minute == 1 and " minute" or " minutes"
-        str = str..separator..minute..suffix
+        local separator = time == "" and "" or " "
+        local suffix = not announce and STRINGS.BCL.M or minute == 1 and STRINGS.BCL.MINUTE or STRINGS.BCL.MINUTES
+        time = time..separator..minute..suffix
     end
 
     if hour < 1 and minute < 1 then
         local second = math.ceil(delta)
-        local suffix = not announce and "s" or second == 1 and " second" or " seconds"
-        str = second..suffix
+        local suffix = not announce and STRINGS.BCL.S or second == 1 and STRINGS.BCL.SECOND or STRINGS.BCL.SECONDS
+        time = second..suffix
     end
 
-    return announce and string.format("%s should be ready in %s.", GetName(boss), str) or str
+    return announce and FMT(STRINGS.BCL.CRT, boss, time) or time
 end
 
 local function OnTimerDone(inst, data)
@@ -84,7 +90,7 @@ local function OnTimerDone(inst, data)
     local boss = data.name
     timestamp[boss].respawn = nil
     BossCalendar:Save()
-    BossCalendar:Say(GetName(boss).." should be ready.", CONFIG.REMINDER_DURATION or 5)
+    BossCalendar:Say(FMT(STRINGS.BCL.OTD, boss), CONFIG.REMINDER_DURATION or 5)
 end
 
 local search_cd = {} -- cooldown
@@ -107,13 +113,13 @@ local function CheckDaywalkerAround()
         local interval = INFO["daywalker"].RESPAWN_INTERVAL
         timestamp["daywalker"].respawn = SecondsNow() + interval
         ThePlayer.components.timer:SetTimeLeft("daywalker", interval)
-        BossCalendar:Say(INFO[daywalker_defeat].NAME.." is still around, respawn will delay one day.", 10)
+        BossCalendar:Say(subfmt(STRINGS.BCL.CDA, {boss = STRINGS.NAMES[daywalker_defeat:upper()]}), 10)
         BossCalendar:Save(); break
     end end
 end
 
 local function OnAnnounce(boss)
-    local message = string.format("%s should be ready.", GetName(boss))
+    local message = FMT(STRINGS.BCL.OA, boss)
 
     if timestamp[boss].respawn then
         message = CountdownRealTime(boss, true)
@@ -181,11 +187,11 @@ function BossCalendar:Load()
 
     if #respawned > 0 then -- absence respawn reminder
         ThePlayer:DoTaskInTime(5, function()
-            local separator = #respawned == 2 and " and " or ", "
+            local separator = #respawned == 2 and STRINGS.BCL.AND or STRINGS.BCL.ANDS
             local bosses = table.concat(respawned, separator)
-            local have = #respawned >= 2 and " have" or " has"
+            local have = #respawned == 1 and STRINGS.BCL.HAS or STRINGS.BCL.HAVE
             local duration = CONFIG.REMINDER_DURATION or 5
-            self:Say(bosses..have.." already respawned.", duration)
+            self:Say(bosses..have..STRINGS.BCL.RESPAWNED, duration)
             self:Save()
         end)
     end
@@ -280,7 +286,7 @@ function BossCalendar:Open()
     self.title = self.root:AddChild(Text(TITLEFONT, 48))
     self.title:SetColour(1, 1, 1, 1)
     self.title:SetPosition(0, 150)
-    self.title:SetString("Boss Calendar")
+    self.title:SetString(STRINGS.BCL.TITLE)
 
     for index, boss in pairs(BOSS) do
         local x = (index - 1) % 5 * 120 - 240

@@ -79,3 +79,10 @@ AddPlayerPostInit(function(inst)
         BossCalendar:Init(inst, configuration)
     end)
 end)
+
+local loc, exist = _G.GetCurrentLocale(), _G.kleifileexists
+if loc and loc.code and exist(MODROOT.."languages/"..loc.code..".lua") then
+    modimport("languages/"..loc.code..".lua")
+else
+    modimport("languages/en.lua") -- fallback to English
+end
