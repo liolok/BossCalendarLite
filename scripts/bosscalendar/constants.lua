@@ -1,5 +1,5 @@
 BOSS = { -- codename for bosses
-    "dragonfly", "beequeen", "klaus", "toadstool", "fuelweaver",
+    "dragonfly", "beequeen", "klaus_sack", "toadstool", "stalker_atrium",
     "crabking", "malbatross", "terrarium", "daywalker",
 }
 
