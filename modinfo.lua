@@ -1,5 +1,5 @@
 name = "Boss Calendar Lite"
-description = "Caculate and remember when bosses respawn, with click-announcing and auto-reminding."
+description = "Calculate and remember when bosses respawn, with click-announcing and auto-reminding."
 
 icon_atlas = "modicon.xml"
 icon = "modicon.tex"
