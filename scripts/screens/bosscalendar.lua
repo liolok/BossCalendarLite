@@ -30,7 +30,7 @@ local function SecondsNow() return (TheWorld.state.cycles + TheWorld.state.time)
 
 function GetName(boss)
     if is_werepig_in_forestjunkpile then boss = boss:gsub("daywalker$", "daywalker2") end
-    return INFO[boss].NAME
+    return STRINGS.NAMES[boss:upper()]
 end
 
 local function AbsoluteGameDay(boss, announce)
