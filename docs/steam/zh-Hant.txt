@@ -1,0 +1,21 @@
+幫你計算並記住 Boss 們何時刷新，支援點擊宣告、自動提醒。
+
+預設綁定 V 鍵，按住查看日曆。
+
+[h2]模組設定[/h2]
+[list]
+    [*]開啟日曆用的按鍵
+    [*]刷新時間的單位：遊戲天數/現實時間
+    [*]遊戲天數的風格：絕對天數/倒數天數
+    [*]自動提醒的顏色
+    [*]自動提醒的持續時長
+[/list]
+
+[h2]致謝[/h2]
+[list]
+    [*]Boas：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]原作者[/url]
+    [*]xaT2x：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]第二任維護者[/url]
+    [*]iaman2b: 貼圖素材重做、測試
+[/list]
+[hr][/hr]
+[url=https://github.com/liolok/BossCalendarLite]原始碼[/url]

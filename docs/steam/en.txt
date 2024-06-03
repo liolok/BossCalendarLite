@@ -2,7 +2,14 @@ Calculate and remember when bosses respawn, with click-announcing and auto-remin
 
 By default, press and hold "V" to view the calendar.
 
-Change unit and style to your preference in mod settings.
+[h2]Mod Settings[/h2]
+[list]
+    [*]Key to open the calendar
+    [*]Unit of respawn time: days in game or time in reality
+    [*]Style of game day: absolute or countdown
+    [*]Color of respawn reminder
+    [*]Duration of respawn reminder
+[/list]
 
 [h2]Credits[/h2]
 [list]
