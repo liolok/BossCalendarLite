@@ -96,7 +96,7 @@ end
 local search_cd = {} -- cooldown
 local function SearchBossByDrop(inst)
     local drop = inst.prefab
-    if search_cd[drop] then return nil end
+    if not ThePlayer or search_cd[drop] then return nil end
 
     search_cd[drop] = ThePlayer:DoTaskInTime(3, function() search_cd[drop] = nil end)
 

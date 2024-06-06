@@ -17,13 +17,12 @@ for _, drop in pairs {
     "horrorfuel",
     "wagpunk_bits",
 } do AddPrefabPostInit(drop, function(inst)
-        inst:DoTaskInTime(0, function()
-            if inst.entity and not inst.entity:GetParent() then
-                BossCalendar:ValidateDefeatByDrop(inst)
-            end
-        end)
+    inst:DoTaskInTime(0, function()
+        if inst.entity and not inst.entity:GetParent() then
+            BossCalendar:ValidateDefeatByDrop(inst)
+        end
     end)
-end
+end) end
 
 local OPEN_KEY = _G.rawget(_G, GetModConfigData("OPEN_KEY"))
 if OPEN_KEY then
