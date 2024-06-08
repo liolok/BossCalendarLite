@@ -10,7 +10,6 @@ local PersistentData = require 'bosscalendar/persistentdata'
 
 local BossCalendar = Class(Screen)
 local Data = PersistentData 'BossCalendarLite'
-local session_id                  -- will get before loading data in BossCalendar:Load()
 local CONFIG = {}                 -- will fill in BossCalendar:Init()
 local timestamp = {}              -- will init in BossCalendar:Init() then maybe load in BossCalendar:Load()
 local is_next_daywalker_2 = false -- will load in BossCalendar:Load(), "at first" werepig is in cavejail
@@ -146,17 +145,16 @@ end
 -- Persistant Data
 
 function BossCalendar:Save()
-  Data:SetValue(session_id .. '_timestamp', timestamp)
-  Data:SetValue(session_id .. '_is_next_daywalker_2', is_next_daywalker_2)
+  Data:SetValue(self.session_id .. '_timestamp', timestamp)
+  Data:SetValue(self.session_id .. '_is_next_daywalker_2', is_next_daywalker_2)
   Data:Save()
   self:Update()
 end
 
 function BossCalendar:Load()
   Data:Load()
-  session_id = tostring(TheWorld.net.components.shardstate:GetMasterSessionId())
-  is_next_daywalker_2 = Data:GetValue(session_id .. '_is_next_daywalker_2')
-  local timestamp_data = Data:GetValue(session_id .. '_timestamp')
+  is_next_daywalker_2 = Data:GetValue(self.session_id .. '_is_next_daywalker_2')
+  local timestamp_data = Data:GetValue(self.session_id .. '_timestamp')
   if not timestamp_data then return end
 
   local respawned = {} -- bosses respawned during offline
@@ -207,6 +205,7 @@ function BossCalendar:Init(inst, configuration)
     }
   end
   self.talking = false
+  self.session_id = TheWorld.net.components.shardstate:GetMasterSessionId()
   self:Load()
   self.init = true
 end
