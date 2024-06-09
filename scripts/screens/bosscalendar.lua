@@ -10,7 +10,6 @@ local PersistentData = require 'bosscalendar/persistentdata'
 
 local BossCalendar = Class(Screen)
 local Data = PersistentData 'BossCalendarLite'
-local CONFIG = {}                 -- will fill in BossCalendar:Init()
 local timestamp = {}              -- will init in BossCalendar:Init() then maybe load in BossCalendar:Load()
 local is_next_daywalker_2 = false -- will load in BossCalendar:Load(), "at first" werepig is in cavejail
 
@@ -81,7 +80,7 @@ local function OnTimerDone(inst, data)
   local boss = data.name
   timestamp[boss].respawn = nil
   BossCalendar:Save()
-  BossCalendar:Say(FMT(STRINGS.BCL.OTD, boss), CONFIG.REMINDER_DURATION or 5)
+  BossCalendar:Say(FMT(STRINGS.BCL.OTD, boss), TUNING.BCL.REMINDER_DURATION or 5)
 end
 
 local search_cd = {} -- cooldown
@@ -116,8 +115,8 @@ local function OnAnnounce(boss)
   local message = FMT(STRINGS.BCL.OA, boss)
 
   if timestamp[boss].respawn then
-    if CONFIG.ANNOUNCE_UNIT then
-      message = CONFIG.ANNOUNCE_STYLE and AbsoluteGameDay(boss, true) or CountdownGameDays(boss, true)
+    if TUNING.BCL.ANNOUNCE_UNIT then
+      message = TUNING.BCL.ANNOUNCE_STYLE and AbsoluteGameDay(boss, true) or CountdownGameDays(boss, true)
     else
       message = CountdownRealTime(boss, true)
     end
@@ -133,7 +132,7 @@ function BossCalendar:Say(message, duration)
 
   self.talking = true
   ThePlayer.components.talker.lineduration = duration
-  ThePlayer.components.talker:Say(message, duration, 0, true, false, CONFIG.REMINDER_COLOR)
+  ThePlayer.components.talker:Say(message, duration, 0, true, false, TUNING.BCL.REMINDER_COLOR)
   ThePlayer.components.talker.Say = function() end
   ThePlayer:DoTaskInTime(duration, function()
     ThePlayer.components.talker.lineduration = 2.5
@@ -185,7 +184,7 @@ function BossCalendar:Load()
       local separator = #respawned == 2 and STRINGS.BCL.AND or STRINGS.BCL.ANDS
       local bosses = table.concat(respawned, separator)
       local have = #respawned == 1 and STRINGS.BCL.HAS or STRINGS.BCL.HAVE
-      local duration = CONFIG.REMINDER_DURATION or 5
+      local duration = TUNING.BCL.REMINDER_DURATION or 5
       self:Say(bosses .. have .. STRINGS.BCL.RESPAWNED, duration)
       self:Save()
     end)
@@ -194,10 +193,9 @@ end
 
 -- General
 
-function BossCalendar:Init(inst, configuration)
+function BossCalendar:Init()
   ThePlayer:AddComponent 'timer'
   ThePlayer:ListenForEvent('timerdone', OnTimerDone)
-  CONFIG = configuration
   for _, boss in ipairs(BOSS) do
     timestamp[boss] = { -- init timestamp table
       defeat = nil,     -- when did player defeat this boss
@@ -316,8 +314,8 @@ function BossCalendar:Update()
       if boss == 'daywalker' and is_next_daywalker_2 then
         self[txt]:SetColour(1, 0.5, 0, 1) -- orange for Scrappy Werepig
       end
-      if CONFIG.CALENDAR_UNIT then
-        self[txt]:SetString(CONFIG.CALENDAR_STYLE and AbsoluteGameDay(boss) or CountdownGameDays(boss))
+      if TUNING.BCL.CALENDAR_UNIT then
+        self[txt]:SetString(TUNING.BCL.CALENDAR_STYLE and AbsoluteGameDay(boss) or CountdownGameDays(boss))
       else
         self[txt]:SetString(CountdownRealTime(boss))
       end

@@ -1,8 +1,9 @@
 local G = GLOBAL
 if G.GetGameModeProperty 'level_type' ~= G.LEVELTYPE.SURVIVAL then return end
-
 local BossCalendar = G.require 'screens/bosscalendar'
 Assets = { Asset('ATLAS', 'images/boss.xml') }
+
+AddPlayerPostInit(function(inst) inst:DoTaskInTime(0, function() BossCalendar:Init() end) end)
 
 for _, drop in pairs {
   'dragon_scales',
@@ -59,7 +60,7 @@ local COLOR = {
   purple      = RGB(128, 0, 128),
   pink        = RGB(255, 192, 203),
 }
-local configuration = {
+G.TUNING.BCL = {
   CALENDAR_UNIT = GetModConfigData 'CALENDAR_UNIT',
   CALENDAR_STYLE = GetModConfigData 'CALENDAR_STYLE',
   ANNOUNCE_UNIT = GetModConfigData 'ANNOUNCE_UNIT',
@@ -67,12 +68,6 @@ local configuration = {
   REMINDER_COLOR = COLOR[GetModConfigData 'REMINDER_COLOR'],
   REMINDER_DURATION = GetModConfigData 'REMINDER_DURATION',
 }
-
-AddPlayerPostInit(function(inst)
-  inst:DoTaskInTime(0, function()
-    BossCalendar:Init(inst, configuration)
-  end)
-end)
 
 local loc, exist = G.GetCurrentLocale(), G.kleifileexists
 if loc and loc.code and exist(MODROOT .. 'languages/' .. loc.code .. '.lua') then
