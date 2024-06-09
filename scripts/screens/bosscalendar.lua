@@ -200,7 +200,7 @@ function BossCalendar:Init(inst, configuration)
   CONFIG = configuration
   for _, boss in ipairs(BOSS) do
     timestamp[boss] = { -- init timestamp table
-      defeat = nil,     -- when did player killed/defeat this boss
+      defeat = nil,     -- when did player defeat this boss
       respawn = nil     -- when will this boss respawn
     }
   end

@@ -91,7 +91,7 @@ configuration_options = {
 
   AddSection 'Announcing',
   AddConfig(
-    'Announce time units',
+    'Announce time unit',
     'ANNOUNCE_UNIT',
     {
       AddConfigOption('Game Days', true, 'Pick your style below'),
