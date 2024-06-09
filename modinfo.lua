@@ -55,7 +55,8 @@ local color_options = {
   'Green', 'Light Green', 'Cyan', 'Blue', 'Light Blue', 'Purple', 'Pink'
 }
 for i = 1, #color_options do
-  color_options[i] = AddConfigOption(color_options[i], color_options[i]:lower():gsub(' ', '_'))
+  local codename = color_options[i]:lower():gsub(' ', '_')
+  color_options[i] = AddConfigOption(color_options[i], codename)
 end
 
 configuration_options = {
@@ -113,7 +114,7 @@ configuration_options = {
     'Reminder color',
     'REMINDER_COLOR',
     color_options,
-    'Green'
+    'green'
   ),
   AddConfig(
     'Reminder duration',
