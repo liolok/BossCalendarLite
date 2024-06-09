@@ -258,16 +258,6 @@ function BossCalendar:Open()
   Screen._ctor(self, 'Boss Calendar')
   self.open = true
 
-  if self.black then self.black:Kill() end
-  self.black = self:AddChild(Image('images/global.xml', 'square.tex'))
-  self.black:SetSize(RESOLUTION_X + 4, RESOLUTION_Y + 4)
-  self.black:SetVRegPoint(ANCHOR_MIDDLE)
-  self.black:SetHRegPoint(ANCHOR_MIDDLE)
-  self.black:SetVAnchor(ANCHOR_MIDDLE)
-  self.black:SetHAnchor(ANCHOR_MIDDLE)
-  self.black:SetScaleMode(SCALEMODE_FIXEDPROPORTIONAL)
-  self.black:SetTint(0, 0, 0, 0)
-
   if self.root then self.root:Kill() end
   self.root = self:AddChild(Widget 'ROOT')
   self.root:SetScaleMode(SCALEMODE_PROPORTIONAL)
