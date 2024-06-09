@@ -50,15 +50,6 @@ local function GetKeyboardOptions()
   return keys
 end
 
-local color_options = {
-  'White', 'Red', 'Coral', 'Orange', 'Yellow', 'Khaki', 'Chocolate', 'Brown',
-  'Green', 'Light Green', 'Cyan', 'Blue', 'Light Blue', 'Purple', 'Pink'
-}
-for i = 1, #color_options do
-  local codename = color_options[i]:lower():gsub(' ', '_')
-  color_options[i] = AddConfigOption(color_options[i], codename)
-end
-
 configuration_options = {
   AddSection 'Keybind',
   AddConfig(
@@ -113,8 +104,15 @@ configuration_options = {
   AddConfig(
     'Reminder color',
     'REMINDER_COLOR',
-    color_options,
-    'green'
+    { -- will use PLAYERCOLOURS from constants.lua
+      AddConfigOption('Red', 'RED'),
+      AddConfigOption('Blue', 'BLUE'),
+      AddConfigOption('Purple', 'PURPLE'),
+      AddConfigOption('Orange', 'ORANGE'),
+      AddConfigOption('Yellow', 'YELLOW'),
+      AddConfigOption('Green', 'GREEN'),
+    },
+    'GREEN'
   ),
   AddConfig(
     'Reminder duration',

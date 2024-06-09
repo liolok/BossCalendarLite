@@ -102,9 +102,12 @@ local function CheckDaywalkerAround()
   for _, entity in ipairs(entities) do
     if entity.prefab == daywalker_defeat then
       local interval = INFO['daywalker'].RESPAWN_INTERVAL
+      local message = subfmt(STRINGS.BCL.CDA, { boss = STRINGS.NAMES[daywalker_defeat:upper()] })
+      local color = WEBCOLOURS[is_next_daywalker_2 and 'RED' or 'ORANGE']
+
       timestamp['daywalker'].respawn = SecondsNow() + interval
       ThePlayer.components.timer:SetTimeLeft('daywalker', interval)
-      BossCalendar:Say(subfmt(STRINGS.BCL.CDA, { boss = STRINGS.NAMES[daywalker_defeat:upper()] }), 10)
+      BossCalendar:Say(message, 10, color)
       BossCalendar:Save()
       break
     end
@@ -127,12 +130,13 @@ end
 
 -- Reminder
 
-function BossCalendar:Say(message, duration)
+function BossCalendar:Say(message, duration, color)
   if self.talking then return end
 
+  local color = color and color or PLAYERCOLOURS[TUNING.BCL.REMINDER_COLOR]
   self.talking = true
   ThePlayer.components.talker.lineduration = duration
-  ThePlayer.components.talker:Say(message, duration, 0, true, false, TUNING.BCL.REMINDER_COLOR)
+  ThePlayer.components.talker:Say(message, duration, 0, true, false, color)
   ThePlayer.components.talker.Say = function() end
   ThePlayer:DoTaskInTime(duration, function()
     ThePlayer.components.talker.lineduration = 2.5
@@ -270,7 +274,7 @@ function BossCalendar:Open()
 
   if self.title then self.title:Kill() end
   self.title = self.root:AddChild(Text(TITLEFONT, 48))
-  self.title:SetColour(1, 1, 1, 1)
+  self.title:SetColour(WHITE)
   self.title:SetPosition(0, 150)
   self.title:SetString(STRINGS.BCL.TITLE)
 
@@ -298,11 +302,11 @@ function BossCalendar:Update()
 
   for _, boss in ipairs(BOSS) do
     local txt, img = boss .. '_txt', boss .. '_img'
-    if timestamp[boss].respawn then       -- display respawn information
-      self[img]:SetTint(0, 0, 0, 1)       -- black image for respawning
-      self[txt]:SetColour(1, 0, 0, 1)     -- red for all other bosses
+    if timestamp[boss].respawn then            -- display respawn information
+      self[img]:SetTint(unpack(DARKGREY))      -- darken image for respawning
+      self[txt]:SetColour(WEBCOLOURS.RED)      -- red for all other bosses
       if boss == 'daywalker' and is_next_daywalker_2 then
-        self[txt]:SetColour(1, 0.5, 0, 1) -- orange for Scrappy Werepig
+        self[txt]:SetColour(WEBCOLOURS.ORANGE) -- orange for Scrappy Werepig
       end
       if TUNING.BCL.CALENDAR_UNIT then
         self[txt]:SetString(TUNING.BCL.CALENDAR_STYLE and AbsoluteGameDay(boss) or CountdownGameDays(boss))
@@ -310,8 +314,8 @@ function BossCalendar:Update()
         self[txt]:SetString(CountdownRealTime(boss))
       end
     else -- display boss name
-      self[img]:SetTint(1, 1, 1, 1)
-      self[txt]:SetColour(1, 1, 1, 1)
+      self[img]:SetTint(unpack(WHITE))
+      self[txt]:SetColour(WHITE)
       self[txt]:SetString(GetName(boss))
     end
   end

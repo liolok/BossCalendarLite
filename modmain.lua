@@ -41,31 +41,12 @@ if OPEN_KEY then
   G.TheInput:AddKeyUpHandler(OPEN_KEY, Close)
 end
 
-local function RGB(r, g, b) return { r / 255, g / 255, b / 255, 1 } end
-local COLOR = {
-  white       = RGB(255, 255, 255),
-  red         = RGB(255, 0, 0),
-  green       = RGB(0, 255, 0),
-  blue        = RGB(0, 0, 255),
-  yellow      = RGB(255, 255, 0),
-  crimsom     = RGB(220, 20, 60),
-  coral       = RGB(255, 127, 80),
-  orange      = RGB(255, 165, 0),
-  khaki       = RGB(240, 230, 140),
-  chocolate   = RGB(210, 105, 30),
-  brown       = RGB(165, 42, 42),
-  light_green = RGB(144, 238, 144),
-  cyan        = RGB(0, 255, 255),
-  light_blue  = RGB(173, 216, 230),
-  purple      = RGB(128, 0, 128),
-  pink        = RGB(255, 192, 203),
-}
 G.TUNING.BCL = {
   CALENDAR_UNIT = GetModConfigData 'CALENDAR_UNIT',
   CALENDAR_STYLE = GetModConfigData 'CALENDAR_STYLE',
   ANNOUNCE_UNIT = GetModConfigData 'ANNOUNCE_UNIT',
   ANNOUNCE_STYLE = GetModConfigData 'ANNOUNCE_STYLE',
-  REMINDER_COLOR = COLOR[GetModConfigData 'REMINDER_COLOR'],
+  REMINDER_COLOR = GetModConfigData 'REMINDER_COLOR',
   REMINDER_DURATION = GetModConfigData 'REMINDER_DURATION',
 }
 
