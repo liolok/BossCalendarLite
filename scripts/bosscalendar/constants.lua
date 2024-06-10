@@ -1,6 +1,6 @@
 BOSS = { -- codename for bosses
   'dragonfly', 'beequeen', 'klaus_sack', 'toadstool', 'stalker_atrium',
-  'crabking', 'malbatross', 'terrarium', 'daywalker',
+  'crabking', 'malbatross', 'terrarium', 'daywalker', 'sharkboi'
 }
 
 INFO = {        -- all other information of bosses
@@ -55,6 +55,11 @@ INFO = {        -- all other information of bosses
     ANIMS = { 'defeat' },
     RESPAWN_INTERVAL = (TUNING.DAYWALKER_RESPAWN_DAYS_COUNT + 1) * TUNING.TOTAL_DAY_TIME,
     -- will subtract time spent on current day
+  },
+  sharkboi = { -- "Frostjaw"
+    DROPS = { 'bootleg' },
+    ANIMS = { 'sharkboi_take' },
+    RESPAWN_INTERVAL = TUNING.SHARKBOI_ARENA_COOLDOWN_DAYS,
   },
 }
 

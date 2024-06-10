@@ -17,6 +17,7 @@ for _, drop in pairs {
   'shieldofterror',
   'horrorfuel',
   'wagpunk_bits',
+  'bootleg',
 } do
   AddPrefabPostInit(drop, function(inst)
     inst:DoTaskInTime(0, function()
