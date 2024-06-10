@@ -286,7 +286,7 @@ function BossCalendar:Open()
     self[txt]:SetString(GetName(boss))
     self[img] = self.root:AddChild(Image('images/boss.xml', boss .. '.tex'))
     self[img]:SetSize(68, 68)
-    self[img]:SetPosition(x, y + 30)
+    self[img]:SetPosition(x, y + 20)
     self[img].OnMouseButton = function(_, button, down)
       if button == 1000 and down then OnAnnounce(boss) end -- Left Mounse Button
     end
