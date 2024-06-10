@@ -74,10 +74,10 @@ local function CountdownRealTime(boss, announce)
   return announce and FMT(STRINGS.BCL.CRT, boss, time) or time
 end
 
-local function OnTimerDone(inst, data)
-  if not type(data) == 'table' or not data.name or not timestamp[data.name].respawn then return end
-
+local function OnTimerDone(_, data)
   local boss = data.name
+  if not timestamp[boss] then return end
+
   timestamp[boss].respawn = nil
   BossCalendar:Save()
   BossCalendar:Say(FMT(STRINGS.BCL.OTD, boss), TUNING.BCL.REMINDER_DURATION or 5)
@@ -198,7 +198,7 @@ end
 -- General
 
 function BossCalendar:Init()
-  ThePlayer:AddComponent 'timer'
+  if not ThePlayer.components.timer then ThePlayer:AddComponent 'timer' end
   ThePlayer:ListenForEvent('timerdone', OnTimerDone)
   for _, boss in ipairs(BOSS) do
     timestamp[boss] = { -- init timestamp table
