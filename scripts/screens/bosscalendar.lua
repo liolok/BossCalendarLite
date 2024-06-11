@@ -4,7 +4,7 @@ local Text = require 'widgets/text'
 local Image = require 'widgets/image'
 local Talker = require 'components/talker'
 
-require 'bosscalendar/constants'
+require 'bosscalendar/bossinfo'
 local Announcer = require 'bosscalendar/announcer'
 local PersistentData = require 'bosscalendar/persistentdata'
 
