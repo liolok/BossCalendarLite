@@ -28,24 +28,17 @@ for _, drop in pairs {
   end)
 end
 
-local OPEN_KEY = G.rawget(G, GetModConfigData 'OPEN_KEY')
-if OPEN_KEY then
-  local function Validate()
-    local active_screen_name = TheFrontEnd:GetActiveScreen() and TheFrontEnd:GetActiveScreen().name or ''
-    return active_screen_name == 'HUD' or active_screen_name == 'Boss Calendar'
-  end
-
-  local function Open() if Validate() and BossCalendar:Open() then TheFrontEnd:PushScreen(BossCalendar) end end
-  local function Close() if Validate() then BossCalendar:Close() end end
-
-  G.TheInput:AddKeyDownHandler(OPEN_KEY, Open)
-  G.TheInput:AddKeyUpHandler(OPEN_KEY, Close)
+local function Validate()
+  local active_screen_name = TheFrontEnd:GetActiveScreen() and TheFrontEnd:GetActiveScreen().name or ''
+  return active_screen_name == 'HUD' or active_screen_name == 'Boss Calendar'
 end
+local function Open() if Validate() and BossCalendar:Open() then TheFrontEnd:PushScreen(BossCalendar) end end
+local function Close() if Validate() then BossCalendar:Close() end end
+G.TheInput:AddKeyDownHandler(G.rawget(G, GetModConfigData 'KEY'), Open)
+G.TheInput:AddKeyUpHandler(G.rawget(G, GetModConfigData 'KEY'), Close)
 
 G.TUNING.BCL = {
-  CALENDAR_UNIT = GetModConfigData 'CALENDAR_UNIT',
   CALENDAR_STYLE = GetModConfigData 'CALENDAR_STYLE',
-  ANNOUNCE_UNIT = GetModConfigData 'ANNOUNCE_UNIT',
   ANNOUNCE_STYLE = GetModConfigData 'ANNOUNCE_STYLE',
   REMINDER_COLOR = GetModConfigData 'REMINDER_COLOR',
   REMINDER_DURATION = GetModConfigData 'REMINDER_DURATION',

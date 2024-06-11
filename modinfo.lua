@@ -10,118 +10,78 @@ client_only_mod = true
 icon_atlas = 'modicon.xml'
 icon = 'modicon.tex'
 
-local function AddConfigOption(desc, data, hover)
-  return {
-    description = desc,
-    data = data,
-    hover = hover
-  }
-end
+local function Section(title) return { name = title, options = { { description = '', data = 0 } }, default = 0 } end
 
-local function AddConfig(label, name, options, default, hover)
-  return {
-    label = label,
-    name = name,
-    options = options,
-    default = default,
-    hover = hover
-  }
-end
-
-local function AddSection(title) return AddConfig(title, '', { { description = '', data = 0 } }, 0) end
-
-local function GetKeyboardOptions()
-  local keys = {}
-  local special_keys = {
-    'TAB', 'MINUS', 'SPACE', 'ENTER', 'ESCAPE', 'INSERT', 'DELETE', 'END',
-    'PAUSE', 'PRINT', 'CAPSLOCK', 'SCROLLOCK', 'RSHIFT', 'LSHIFT', 'SHIFT',
-    'RCTRL', 'LCTRL', 'CTRL', 'RALT', 'LALT', 'ALT', 'BACKSPACE', 'PERIOD',
-    'SLASH', 'SEMICOLON', 'LEFTBRACKET', 'RIGHTBRACKET', 'BACKSLASH', 'TILDE',
-    'UP', 'DOWN', 'RIGHT', 'LEFT', 'PAGEUP', 'PAGEDOWN'
-  }
-
-  local function AddConfigKey(t, key) t[#t + 1] = AddConfigOption(key, 'KEY_' .. key) end
-
-  for i = 65, 90 do AddConfigKey(keys, (i .. ''):char()) end -- A-Z
-  for i = 1, 10 do AddConfigKey(keys, i % 10) end            -- 1-0
-  for i = 1, 12 do AddConfigKey(keys, 'F' .. i) end          -- F1-F12
-  for i = 1, #special_keys do AddConfigKey(keys, special_keys[i]) end
-
-  return keys
-end
+local keys = {
+  'Escape', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Print', 'ScrolLock', 'Pause',
+  'Tilde', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'Minus', 'Equals', 'Backspace',
+  'Tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'LeftBracket', 'RightBracket', 'Backslash',
+  'CapsLock', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Semicolon', 'Enter',
+  'LShift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Period', 'Slash', 'RShift', 'LCtrl', 'LAlt', 'Space', 'RAlt', 'RCtrl',
+  'Insert', 'Delete', 'Home', 'End', 'PageUp', 'PageDown', 'Up', 'Down', 'Left', 'Right',
+  'Keypad 0', 'Keypad 1', 'Keypad 2', 'Keypad 3', 'Keypad 4', 'Keypad 5', 'Keypad 6', 'Keypad 7', 'Keypad 8', 'Keypad 9',
+  'Keypad Divide', 'Keypad Multiply', 'Keypad Minus', 'Keypad Plus', 'Keypad Enter', 'Keypad Equals',
+}
+local key_options = {}
+for i = 1, #keys do key_options[i] = { description = keys[i], data = 'KEY_' .. keys[i]:upper():gsub('Keypad ', 'KP_') } end
 
 configuration_options = {
-  AddSection 'Keybind',
-  AddConfig(
-    'Open key',
-    'OPEN_KEY',
-    GetKeyboardOptions(),
-    'KEY_V',
-    'Assign a key, press and hold to view calendar.'
-  ),
+  {
+    name = 'KEY',
+    label = 'Keybind',
+    hover = 'Assign a key, press and hold to view calendar.',
+    options = key_options,
+    default = 'KEY_V'
+  },
 
-  AddSection 'Calendar',
-  AddConfig(
-    'Calendar time unit',
-    'CALENDAR_UNIT',
-    {
-      AddConfigOption('Game Days', true, 'Pick your style below'),
-      AddConfigOption('Real Time', false, '1h 30m'),
+  Section 'Time Style',
+  {
+    name = 'CALENDAR_STYLE',
+    label = 'Calendar',
+    hover = 'How respawn time shows up in calendar.',
+    options = {
+      { description = 'Day',  data = 'DAY',  hover = 'Day 21.1' },
+      { description = 'Days', data = 'DAYS', hover = '19.9d' },
+      { description = 'Time', data = 'TIME', hover = '1h 30m' },
     },
-    true
-  ),
-  AddConfig(
-    'Calendar time style',
-    'CALENDAR_STYLE',
-    {
-      AddConfigOption('Absolute Day', true, 'Day 21.1'),
-      AddConfigOption('Countdown Days', false, '19.9d'),
+    default = 'DAYS'
+  },
+  {
+    name = 'ANNOUNCE_STYLE',
+    label = 'Announce',
+    hover = 'How do you announce respawn time.',
+    options = {
+      { description = 'Day',  data = 'DAY',  hover = 'Dragonfly will repsawn on day 21.1.' },
+      { description = 'Days', data = 'DAYS', hover = 'Dragonfly will repsawn in 19.9 days.' },
+      { description = 'Time', data = 'TIME', hover = 'Dragonfly will repsawn in 1 hour 30 minutes.' },
     },
-    false
-  ),
+    default = 'DAYS'
+  },
 
-  AddSection 'Announcing',
-  AddConfig(
-    'Announce time unit',
-    'ANNOUNCE_UNIT',
-    {
-      AddConfigOption('Game Days', true, 'Pick your style below'),
-      AddConfigOption('Real Time', false, 'Dragonfly will repsawn in 1 hour 30 minutes.'),
+  Section 'Reminder',
+  {
+    name = 'REMINDER_COLOR',
+    label = 'Color',
+    hover = 'Choose a color for respawn reminder line.',
+    options = { -- will use PLAYERCOLOURS from constants.lua
+      { description = 'Red',    data = 'RED' },
+      { description = 'Blue',   data = 'BLUE' },
+      { description = 'Purple', data = 'PURPLE' },
+      { description = 'Orange', data = 'ORANGE' },
+      { description = 'Yellow', data = 'YELLOW' },
+      { description = 'Green',  data = 'GREEN' },
     },
-    true
-  ),
-  AddConfig(
-    'Announce time style',
-    'ANNOUNCE_STYLE',
-    {
-      AddConfigOption('Absolute Day', true, 'Dragonfly will repsawn on day 21.1.'),
-      AddConfigOption('Countdown Days', false, 'Dragonfly will repsawn in 19.9 days.'),
+    default = 'GREEN',
+  },
+  {
+    name = 'REMINDER_DURATION',
+    label = 'Duration',
+    hover = 'How long does respawn reminder last?',
+    options = {
+      { description = 'Short',   data = 3, hover = '3 seconds' },
+      { description = 'Default', data = 5, hover = '5 seconds' },
+      { description = 'Long',    data = 7, hover = '7 seconds' },
     },
-    false
-  ),
-
-  AddSection 'Reminder',
-  AddConfig(
-    'Reminder color',
-    'REMINDER_COLOR',
-    { -- will use PLAYERCOLOURS from constants.lua
-      AddConfigOption('Red', 'RED'),
-      AddConfigOption('Blue', 'BLUE'),
-      AddConfigOption('Purple', 'PURPLE'),
-      AddConfigOption('Orange', 'ORANGE'),
-      AddConfigOption('Yellow', 'YELLOW'),
-      AddConfigOption('Green', 'GREEN'),
-    },
-    'GREEN'
-  ),
-  AddConfig(
-    'Reminder duration',
-    'REMINDER_DURATION',
-    {
-      AddConfigOption('Short', 3, 'Reminders last for 3 seconds'),
-      AddConfigOption('Default', 5, 'Reminders last for 5 seconds'),
-      AddConfigOption('Long', 7, 'Reminders last for 7 seconds'),
-    },
-    5
-  ),
+    default = 5,
+  },
 }

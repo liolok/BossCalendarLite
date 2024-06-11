@@ -74,6 +74,12 @@ local function CountdownRealTime(boss, announce)
   return announce and FMT(STRINGS.BCL.CRT, boss, time) or time
 end
 
+local time = { -- to make use of GetModConfigData 'CALENDAR_STYLE' and 'ANNOUNCE_STYLE'
+  DAY = AbsoluteGameDay,
+  DAYS = CountdownGameDays,
+  TIME = CountdownRealTime,
+}
+
 local function OnTimerDone(_, data)
   local boss = data.name
   if not timestamp[boss] then return end
@@ -112,20 +118,6 @@ local function CheckDaywalkerAround()
       break
     end
   end
-end
-
-local function OnAnnounce(boss)
-  local message = FMT(STRINGS.BCL.OA, boss)
-
-  if timestamp[boss].respawn then
-    if TUNING.BCL.ANNOUNCE_UNIT then
-      message = TUNING.BCL.ANNOUNCE_STYLE and AbsoluteGameDay(boss, true) or CountdownGameDays(boss, true)
-    else
-      message = CountdownRealTime(boss, true)
-    end
-  end
-
-  Announcer:Announce(message, boss)
 end
 
 -- Reminder
@@ -288,7 +280,12 @@ function BossCalendar:Open()
     self[img]:SetSize(68, 68)
     self[img]:SetPosition(x, y + 20)
     self[img].OnMouseButton = function(_, button, down)
-      if button == 1000 and down then OnAnnounce(boss) end -- Left Mounse Button
+      if button == MOUSEBUTTON_LEFT and down then
+        local message = timestamp[boss].respawn
+            and time[TUNING.BCL.ANNOUNCE_STYLE](boss, true)
+            or FMT(STRINGS.BCL.OA, boss)
+        Announcer:Announce(message, boss)
+      end
     end
   end
 
@@ -308,11 +305,7 @@ function BossCalendar:Update()
       if boss == 'daywalker' and is_next_daywalker_2 then
         self[txt]:SetColour(WEBCOLOURS.ORANGE) -- orange for Scrappy Werepig
       end
-      if TUNING.BCL.CALENDAR_UNIT then
-        self[txt]:SetString(TUNING.BCL.CALENDAR_STYLE and AbsoluteGameDay(boss) or CountdownGameDays(boss))
-      else
-        self[txt]:SetString(CountdownRealTime(boss))
-      end
+      self[txt]:SetString(time[TUNING.BCL.CALENDAR_STYLE](boss))
     else -- display boss name
       self[img]:SetTint(unpack(WHITE))
       self[txt]:SetColour(WHITE)
