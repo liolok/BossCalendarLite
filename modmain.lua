@@ -28,6 +28,7 @@ for _, drop in pairs {
   end)
 end
 
+-- setup calendar keybind
 local function Validate()
   local active_screen_name = TheFrontEnd:GetActiveScreen() and TheFrontEnd:GetActiveScreen().name or ''
   return active_screen_name == 'HUD' or active_screen_name == 'Boss Calendar'
@@ -37,6 +38,7 @@ local function Close() if Validate() then BossCalendar:Close() end end
 G.TheInput:AddKeyDownHandler(G.rawget(G, GetModConfigData 'KEY'), Open)
 G.TheInput:AddKeyUpHandler(G.rawget(G, GetModConfigData 'KEY'), Close)
 
+-- get config options
 G.TUNING.BCL = {
   CALENDAR_STYLE = GetModConfigData 'CALENDAR_STYLE',
   ANNOUNCE_STYLE = GetModConfigData 'ANNOUNCE_STYLE',
@@ -44,6 +46,7 @@ G.TUNING.BCL = {
   REMINDER_DURATION = GetModConfigData 'REMINDER_DURATION',
 }
 
+-- load translation strings
 local loc, exist = G.GetCurrentLocale(), G.kleifileexists
 if loc and loc.code and exist(MODROOT .. 'languages/' .. loc.code .. '.lua') then
   modimport('languages/' .. loc.code)

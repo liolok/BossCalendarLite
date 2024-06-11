@@ -22,15 +22,14 @@ local keys = {
   'Keypad 0', 'Keypad 1', 'Keypad 2', 'Keypad 3', 'Keypad 4', 'Keypad 5', 'Keypad 6', 'Keypad 7', 'Keypad 8', 'Keypad 9',
   'Keypad Divide', 'Keypad Multiply', 'Keypad Minus', 'Keypad Plus', 'Keypad Enter', 'Keypad Equals',
 }
-local key_options = {}
-for i = 1, #keys do key_options[i] = { description = keys[i], data = 'KEY_' .. keys[i]:upper():gsub('Keypad ', 'KP_') } end
+for i = 1, #keys do keys[i] = { description = keys[i], data = 'KEY_' .. keys[i]:gsub('Keypad ', 'KP_'):upper() } end
 
 configuration_options = {
   {
     name = 'KEY',
     label = 'Keybind',
     hover = 'Assign a key, press and hold to view calendar.',
-    options = key_options,
+    options = keys,
     default = 'KEY_V'
   },
 
@@ -71,17 +70,17 @@ configuration_options = {
       { description = 'Yellow', data = 'YELLOW' },
       { description = 'Green',  data = 'GREEN' },
     },
-    default = 'GREEN',
+    default = 'GREEN'
   },
   {
     name = 'REMINDER_DURATION',
     label = 'Duration',
     hover = 'How long does respawn reminder last?',
     options = {
-      { description = 'Short',   data = 3, hover = '3 seconds' },
-      { description = 'Default', data = 5, hover = '5 seconds' },
-      { description = 'Long',    data = 7, hover = '7 seconds' },
+      { description = 'Short',   data = 3, hover = '3 Seconds' },
+      { description = 'Default', data = 5, hover = '5 Seconds' },
+      { description = 'Long',    data = 7, hover = '7 Seconds' },
     },
-    default = 5,
+    default = 5
   },
 }
