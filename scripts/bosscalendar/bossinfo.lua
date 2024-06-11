@@ -1,6 +1,6 @@
 BOSS = { -- codename for bosses
-  'dragonfly', 'beequeen', 'klaus_sack', 'toadstool', 'stalker_atrium',
-  'crabking', 'malbatross', 'terrarium', 'daywalker', 'sharkboi'
+  'dragonfly', 'toadstool', 'beequeen', 'klaus_sack', 'stalker_atrium',
+  'malbatross', 'crabking', 'terrarium', 'daywalker', 'sharkboi'
 }
 
 INFO = {        -- all other information of bosses
