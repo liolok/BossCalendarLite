@@ -59,9 +59,9 @@ configuration_options = {
 
   Section 'Reminder',
   {
-    name = 'REMINDER_LINE_COLOR',
+    name = 'SAY_COLOR',
     label = 'Color',
-    hover = 'Choose a color for respawn reminder line.',
+    hover = 'Choose a color for respawn reminder message.',
     options = { -- will use PLAYERCOLOURS from constants.lua
       { description = 'Red',    data = 'RED' },
       { description = 'Blue',   data = 'BLUE' },
@@ -73,7 +73,7 @@ configuration_options = {
     default = 'GREEN'
   },
   {
-    name = 'REMINDER_DURATION',
+    name = 'SAY_DURATION',
     label = 'Duration',
     hover = 'How long does respawn reminder last?',
     options = {

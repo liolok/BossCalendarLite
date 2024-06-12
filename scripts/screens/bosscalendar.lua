@@ -74,7 +74,7 @@ local function CountdownRealTime(boss, announce)
   return announce and FMT(STRINGS.BCL.CRT, boss, time) or time
 end
 
-local time = { -- to make use of GetModConfigData 'CALENDAR_STYLE' and 'ANNOUNCE_STYLE'
+local time = { -- to make use of GetModConfigData 'CALENDAR_TIME_STYLE' and 'ANNOUNCE_TIME_STYLE'
   DAY = AbsoluteGameDay,
   DAYS = CountdownGameDays,
   TIME = CountdownRealTime,
@@ -86,7 +86,7 @@ local function OnTimerDone(_, data)
 
   timestamp[boss].respawn = nil
   BossCalendar:Save()
-  BossCalendar:Say(FMT(STRINGS.BCL.OTD, boss), TUNING.BCL.REMINDER_DURATION)
+  BossCalendar:Say(FMT(STRINGS.BCL.OTD, boss), TUNING.BCL.SAY.DURATION)
 end
 
 local search_cd = {} -- cooldown
@@ -125,7 +125,7 @@ end
 function BossCalendar:Say(message, duration, color)
   if self.talking then return end
 
-  local color = color and color or PLAYERCOLOURS[TUNING.BCL.REMINDER.COLOR]
+  local color = color and color or PLAYERCOLOURS[TUNING.BCL.SAY.COLOR]
   self.talking = true
   ThePlayer.components.talker.lineduration = duration
   ThePlayer.components.talker:Say(message, duration, 0, true, false, color)
@@ -180,7 +180,7 @@ function BossCalendar:Load()
       local separator = #respawned == 2 and STRINGS.BCL.AND or STRINGS.BCL.ANDS
       local bosses = table.concat(respawned, separator)
       local have = #respawned == 1 and STRINGS.BCL.HAS or STRINGS.BCL.HAVE
-      self:Say(bosses .. have .. STRINGS.BCL.RESPAWNED, TUNING.BCL.REMINDER.DURATION)
+      self:Say(bosses .. have .. STRINGS.BCL.RESPAWNED, TUNING.BCL.SAY.DURATION)
       self:Save()
     end)
   end

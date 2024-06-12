@@ -44,9 +44,9 @@ G.TUNING.BCL = {
     CALENDAR = GetModConfigData 'CALENDAR_TIME_STYLE',
     ANNOUNCE = GetModConfigData 'ANNOUNCE_TIME_STYLE',
   },
-  REMINDER = {
-    COLOR = GetModConfigData 'REMINDER_LINE_COLOR',
-    DURATION = GetModConfigData 'REMINDER_DURATION',
+  SAY = {
+    COLOR = GetModConfigData 'SAY_COLOR',
+    DURATION = GetModConfigData 'SAY_DURATION',
   },
 }
 
