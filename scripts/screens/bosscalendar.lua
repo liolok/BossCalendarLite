@@ -86,7 +86,7 @@ local function OnTimerDone(_, data)
 
   timestamp[boss].respawn = nil
   BossCalendar:Save()
-  BossCalendar:Say(FMT(STRINGS.BCL.OTD, boss), TUNING.BCL.REMINDER_DURATION or 5)
+  BossCalendar:Say(FMT(STRINGS.BCL.OTD, boss), TUNING.BCL.REMINDER_DURATION)
 end
 
 local search_cd = {} -- cooldown
@@ -125,7 +125,7 @@ end
 function BossCalendar:Say(message, duration, color)
   if self.talking then return end
 
-  local color = color and color or PLAYERCOLOURS[TUNING.BCL.REMINDER_COLOR]
+  local color = color and color or PLAYERCOLOURS[TUNING.BCL.REMINDER.COLOR]
   self.talking = true
   ThePlayer.components.talker.lineduration = duration
   ThePlayer.components.talker:Say(message, duration, 0, true, false, color)
@@ -180,8 +180,7 @@ function BossCalendar:Load()
       local separator = #respawned == 2 and STRINGS.BCL.AND or STRINGS.BCL.ANDS
       local bosses = table.concat(respawned, separator)
       local have = #respawned == 1 and STRINGS.BCL.HAS or STRINGS.BCL.HAVE
-      local duration = TUNING.BCL.REMINDER_DURATION or 5
-      self:Say(bosses .. have .. STRINGS.BCL.RESPAWNED, duration)
+      self:Say(bosses .. have .. STRINGS.BCL.RESPAWNED, TUNING.BCL.REMINDER.DURATION)
       self:Save()
     end)
   end
@@ -282,7 +281,7 @@ function BossCalendar:Open()
     self[img].OnMouseButton = function(_, button, down)
       if button == MOUSEBUTTON_LEFT and down then
         local message = timestamp[boss].respawn
-            and time[TUNING.BCL.ANNOUNCE_STYLE](boss, true)
+            and time[TUNING.BCL.STYLE.ANNOUNCE](boss, true)
             or FMT(STRINGS.BCL.OA, boss)
         Announcer:Announce(message, boss)
       end
@@ -305,7 +304,7 @@ function BossCalendar:Update()
       if boss == 'daywalker' and is_next_daywalker_2 then
         self[txt]:SetColour(WEBCOLOURS.ORANGE) -- orange for Scrappy Werepig
       end
-      self[txt]:SetString(time[TUNING.BCL.CALENDAR_STYLE](boss))
+      self[txt]:SetString(time[TUNING.BCL.STYLE.CALENDAR](boss))
     else -- display boss name
       self[img]:SetTint(unpack(WHITE))
       self[txt]:SetColour(WHITE)

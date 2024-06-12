@@ -40,10 +40,14 @@ G.TheInput:AddKeyUpHandler(G.rawget(G, GetModConfigData 'KEY'), Close)
 
 -- get config options
 G.TUNING.BCL = {
-  CALENDAR_STYLE = GetModConfigData 'CALENDAR_STYLE',
-  ANNOUNCE_STYLE = GetModConfigData 'ANNOUNCE_STYLE',
-  REMINDER_COLOR = GetModConfigData 'REMINDER_COLOR',
-  REMINDER_DURATION = GetModConfigData 'REMINDER_DURATION',
+  STYLE = {
+    CALENDAR = GetModConfigData 'CALENDAR_TIME_STYLE',
+    ANNOUNCE = GetModConfigData 'ANNOUNCE_TIME_STYLE',
+  },
+  REMINDER = {
+    COLOR = GetModConfigData 'REMINDER_LINE_COLOR',
+    DURATION = GetModConfigData 'REMINDER_DURATION',
+  },
 }
 
 -- load translation strings

@@ -35,7 +35,7 @@ configuration_options = {
 
   Section 'Time Style',
   {
-    name = 'CALENDAR_STYLE',
+    name = 'CALENDAR_TIME_STYLE',
     label = 'Calendar',
     hover = 'How respawn time shows up in calendar.',
     options = {
@@ -46,7 +46,7 @@ configuration_options = {
     default = 'DAYS'
   },
   {
-    name = 'ANNOUNCE_STYLE',
+    name = 'ANNOUNCE_TIME_STYLE',
     label = 'Announce',
     hover = 'How do you announce respawn time.',
     options = {
@@ -59,7 +59,7 @@ configuration_options = {
 
   Section 'Reminder',
   {
-    name = 'REMINDER_COLOR',
+    name = 'REMINDER_LINE_COLOR',
     label = 'Color',
     hover = 'Choose a color for respawn reminder line.',
     options = { -- will use PLAYERCOLOURS from constants.lua
