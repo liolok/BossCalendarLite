@@ -55,10 +55,20 @@ configuration_options = {
     name = 'announce_time_style',
   },
 
-  { name = 'Reminder',   options = { { description = '', data = 0 } }, default = 0 },
+  { name = 'Remind', options = { { description = '', data = 0 } }, default = 0 },
+  {
+    label = 'Position',
+    hover = 'Where should message appear?',
+    options = {
+      { description = 'Chat', data = 'chat', hover = 'Message shows up in chat history.' },
+      { description = 'Talk', data = 'talk', hover = 'Character talks, message shows upon head.' },
+    },
+    default = 'talk',
+    name = 'remind_position',
+  },
   {
     label = 'Color',
-    hover = 'Choose a color for respawn reminder message.',
+    hover = 'Choose a color for message.',
     options = { -- will use PLAYERCOLOURS from constants.lua
       { description = 'Red',    data = 'RED' },
       { description = 'Blue',   data = 'BLUE' },
@@ -68,17 +78,17 @@ configuration_options = {
       { description = 'Green',  data = 'GREEN' },
     },
     default = 'GREEN',
-    name = 'reminder_color',
+    name = 'remind_color',
   },
   {
-    label = 'Duration',
-    hover = 'How long does respawn reminder message last?',
+    label = 'Talk Duration',
+    hover = 'How long does talking message last?',
     options = {
       { description = 'Short',   data = 3, hover = '3 Seconds' },
       { description = 'Default', data = 5, hover = '5 Seconds' },
       { description = 'Long',    data = 7, hover = '7 Seconds' },
     },
     default = 5,
-    name = 'reminder_duration',
+    name = 'talk_duration',
   },
 }

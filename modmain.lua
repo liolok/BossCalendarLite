@@ -7,8 +7,9 @@ Assets = { Asset('ATLAS', 'images/boss.xml') }
 modimport 'tuning'
 TUNING.BCL.CALENDAR_TIME_STYLE = GetModConfigData 'calendar_time_style'
 TUNING.BCL.ANNOUNCE_TIME_STYLE = GetModConfigData 'announce_time_style'
-TUNING.BCL.REMINDER_COLOR = GetModConfigData 'reminder_color'
-TUNING.BCL.REMINDER_DURATION = GetModConfigData 'reminder_duration'
+TUNING.BCL.REMIND_POSITION = GetModConfigData 'remind_position'
+TUNING.BCL.REMIND_COLOR = GetModConfigData 'remind_color'
+TUNING.BCL.TALK_DURATION = GetModConfigData 'talk_duration'
 
 -- load translation strings
 local loc, exist = G.GetCurrentLocale(), G.kleifileexists

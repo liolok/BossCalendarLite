@@ -17,19 +17,23 @@ local function FMT(s, boss, time)
   return subfmt(s, tab)
 end
 
-local function Talk(message, duration, color)
-  if not ThePlayer.components.talker then return end
-  duration = duration and duration or TUNING.BCL.REMINDER_DURATION
-  color = color and color or PLAYERCOLOURS[TUNING.BCL.REMINDER_COLOR]
-  ThePlayer.components.talker:Say(message, duration, true, true, false, color)
+local function Remind(message, duration, color)
+  color = color or PLAYERCOLOURS[TUNING.BCL.REMIND_COLOR]
+  if TUNING.BCL.REMIND_POSITION == 'chat' then
+    -- ChatHistoryManager:AddToHistory(type, sender_userid, sender_netid, sender_name, message, colour, icondata, whisper, localonly, text_filter_context)
+    ChatHistory:AddToHistory(ChatTypes.Announcement, nil, nil, nil, message, color, nil, false, true)
+  elseif TUNING.BCL.REMIND_POSITION == 'talk' then
+    if not ThePlayer.components.talker then return end
+    -- Talker:Say(script, time, noanim, force, nobroadcast, colour, text_filter_context, original_author_netid, onfinishedlinesfn, sgparam)
+    ThePlayer.components.talker:Say(message, duration or TUNING.BCL.TALK_DURATION, true, true, true, color)
+  end
 end
 
 local function RemindOfflineRespawn(bosses)
   if #bosses == 0 then return end
-  local separator = #bosses == 2 and STRINGS.BCL.AND or STRINGS.BCL.ANDS
-  local they = table.concat(bosses, separator)
-  local have = #bosses == 1 and STRINGS.BCL.HAS or STRINGS.BCL.HAVE
-  Talk(they .. have .. STRINGS.BCL.RESPAWNED)
+  local separator = (#bosses == 2) and STRINGS.BCL.AND or STRINGS.BCL.ANDS
+  Remind(subfmt(STRINGS.BCL.ORR,
+    { bosses = table.concat(bosses, separator), have = (#bosses == 1) and STRINGS.BCL.HAS or STRINGS.BCL.HAVE }))
 end
 
 -- Persistant Data
@@ -75,7 +79,7 @@ function BossCalendar:OnTimerDone(boss)
   if not self.timestamp[boss] then return end -- unrelated timers
   self.timestamp[boss].respawn = nil
   self:Save()
-  Talk(FMT(STRINGS.BCL.OTD, boss))
+  Remind(FMT(STRINGS.BCL.OTD, boss))
 end
 
 function BossCalendar:Init()
@@ -121,7 +125,7 @@ function BossCalendar:CheckDaywalkerAround()
       local interval = TUNING.BCL.INFO[dd].RESPAWN_INTERVAL + TUNING.TOTAL_DAY_TIME -- add a whole day
       ThePlayer.components.timer:SetTimeLeft('daywalker', interval)                 -- reset timer
       self.timestamp['daywalker'].respawn = Now() + interval                        -- reset repsawn timestamp
-      Talk(message, TUNING.MAX_TALKER_DURATION, TUNING.BCL.INFO[dd].COLOR)
+      Remind(message, TUNING.MAX_TALKER_DURATION, TUNING.BCL.INFO[dd].COLOR)
       self:Save()
       break
     end

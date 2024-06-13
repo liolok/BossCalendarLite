@@ -7,16 +7,16 @@ GLOBAL.STRINGS.BCL = {
   ANDS = '、',
   HAS = ' 已',
   HAVE = ' 均已',
-  RESPAWNED = '在離線期間刷新。',
+  ORR = '󰀀 {bosses}{have}在離線期間刷新。',
 
   -- OnTimerDone()
-  OTD = '{boss}剛剛刷新。',
+  OTD = '󰀘 {boss}剛剛刷新。',
 
   -- OnAnnounce()
   OA = '{boss}應已就緒。',
 
   -- CheckDaywalkerAround()
-  CDA = '{boss}仍在附近，刷新將會延遲一天。',
+  CDA = '󰀀 {boss}仍在附近，刷新將會延遲一天。',
 
   -- AbsoluteGameDay()
   AGD_LONG = '{boss}將在第 {time} 天刷新。',
