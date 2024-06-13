@@ -2,7 +2,7 @@ GLOBAL.STRINGS.BCL = {
   -- Open()
   TITLE = 'Boss Calendar',
 
-  -- Load()
+  -- OfflineRespawnRemind()
   AND = ' and ',
   ANDS = ', ',
   HAS = ' has',
@@ -19,16 +19,11 @@ GLOBAL.STRINGS.BCL = {
   CDA = '{boss} is still around, respawn will delay one day.',
 
   -- AbsoluteGameDay()
-  AGD = {
-    LONG = '{boss} will respawn on day {time}.',
-    SHORT = 'Day {time}',
-  },
+  AGD_LONG = '{boss} will respawn on day {time}.',
+  AGD_SHORT = 'Day {time}',
 
   -- CountdownGameDays()
-  CGD = {
-    LONG = '{boss} will respawn in {time}.',
-    SHORT = '{time}d',
-  },
+  CGD = '{boss} will respawn in {time}.',
   DAY = ' day',
   DAYS = ' days',
 

@@ -2,7 +2,7 @@ GLOBAL.STRINGS.BCL = {
   -- Open()
   TITLE = 'Boss 日历',
 
-  -- Load()
+  -- OfflineRespawnRemind()
   AND = '和',
   ANDS = '、',
   HAS = ' 已',
@@ -19,16 +19,11 @@ GLOBAL.STRINGS.BCL = {
   CDA = '{boss}仍在附近，刷新将会延迟一天。',
 
   -- AbsoluteGameDay()
-  AGD = {
-    LONG = '{boss}将在第 {time} 天刷新。',
-    SHORT = '第 {time} 天',
-  },
+  AGD_LONG = '{boss}将在第 {time} 天刷新。',
+  AGD_SHORT = '第 {time} 天',
 
   -- CountdownGameDays()
-  CGD = {
-    LONG = '{boss}将在 {time}之后刷新。',
-    SHORT = '{time} 天'
-  },
+  CGD = '{boss}将在 {time}之后刷新。',
   DAY = ' 天',
   DAYS = ' 天',
 
