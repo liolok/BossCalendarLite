@@ -20,11 +20,10 @@ end
 local function Remind(message, duration, color)
   color = color or PLAYERCOLOURS[TUNING.BCL.REMIND_COLOR]
   if TUNING.BCL.REMIND_POSITION == 'chat' then
-    -- ChatHistoryManager:AddToHistory(type, sender_userid, sender_netid, sender_name, message, colour, icondata, whisper, localonly, text_filter_context)
-    ChatHistory:AddToHistory(ChatTypes.Announcement, nil, nil, nil, message, color, nil, false, true)
-  elseif TUNING.BCL.REMIND_POSITION == 'talk' then
+    ChatHistory:OnAnnouncement(message, color) -- ChatHistoryManager:OnAnnouncement(message, colour, announce_type)
+  elseif TUNING.BCL.REMIND_POSITION == 'head' then
     if not ThePlayer.components.talker then return end
-    -- Talker:Say(script, time, noanim, force, nobroadcast, colour, text_filter_context, original_author_netid, onfinishedlinesfn, sgparam)
+    -- Talker:Say(script, time, noanim, force, nobroadcast, colour, ...)
     ThePlayer.components.talker:Say(message, duration or TUNING.BCL.TALK_DURATION, true, true, true, color)
   end
 end

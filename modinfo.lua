@@ -60,10 +60,10 @@ configuration_options = {
     label = 'Position',
     hover = 'Where should message appear?',
     options = {
-      { description = 'Chat', data = 'chat', hover = 'Message shows up in chat history.' },
-      { description = 'Talk', data = 'talk', hover = 'Character talks, message shows upon head.' },
+      { description = 'Chat', data = 'chat', hover = 'Message shows up in chat history, visible to yourself only.' },
+      { description = 'Head', data = 'head', hover = 'Message shows upon your player character.' },
     },
-    default = 'talk',
+    default = 'head',
     name = 'remind_position',
   },
   {
@@ -81,8 +81,8 @@ configuration_options = {
     name = 'remind_color',
   },
   {
-    label = 'Talk Duration',
-    hover = 'How long does talking message last?',
+    label = 'Duration',
+    hover = 'How long does head message last?',
     options = {
       { description = 'Short',   data = 3, hover = '3 Seconds' },
       { description = 'Default', data = 5, hover = '5 Seconds' },
