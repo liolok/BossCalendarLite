@@ -12,8 +12,8 @@ GLOBAL.STRINGS.BCL = {
   -- OnTimerDone()
   OTD = '󰀘 {boss}剛剛刷新。',
 
-  -- OnAnnounce()
-  OA = '{boss}應已就緒。',
+  -- OnClick()
+  OC = '{boss}應已就緒。',
 
   -- CheckDaywalkerAround()
   CDA = '󰀀 {boss}仍在附近，刷新將會延遲一天。',

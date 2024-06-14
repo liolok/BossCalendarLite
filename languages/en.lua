@@ -12,8 +12,8 @@ GLOBAL.STRINGS.BCL = {
   -- OnTimerDone()
   OTD = '󰀘 {boss} has just respawned.',
 
-  -- OnAnnounce()
-  OA = '{boss} should be ready.',
+  -- OnClick()
+  OC = '{boss} should be ready.',
 
   -- CheckDaywalkerAround()
   CDA = '󰀀 {boss} is still around, respawn will delay one day.',

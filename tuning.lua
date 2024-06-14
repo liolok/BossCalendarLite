@@ -1,9 +1,17 @@
 local BOSS = { -- codename for bosses
-  'dragonfly', 'toadstool', 'beequeen', 'klaus_sack', 'stalker_atrium',
-  'malbatross', 'crabking', 'terrarium', 'daywalker', 'sharkboi'
+  'dragonfly', -- Dragonfly
+  'toadstool', -- Toadstool
+  'beequeen', -- Bee Queen
+  'klaus_sack', -- Loot Stash
+  'stalker_atrium', -- Fuelweaver
+  'malbatross', -- Malbatross
+  'crabking', -- Crab King
+  'terrarium', -- Terrarium
+  'daywalker', -- Nightmare Werepig / Scrappy Werepig
+  'sharkboi', -- Frostjaw
 }
 
-local info = {  -- all other information of bosses
+local info = { -- all other information of bosses
   dragonfly = { -- Dragonfly
     DROPS = { 'dragon_scales' },
     ANIMS = { 'death' },
@@ -64,7 +72,9 @@ local info = {  -- all other information of bosses
   },
 }
 -- use red for all other bosses except Scrappy Werepig
-for _, boss in ipairs(BOSS) do info[boss].COLOR = GLOBAL.WEBCOLOURS.RED end
+for _, boss in ipairs(BOSS) do
+  info[boss].COLOR = GLOBAL.WEBCOLOURS.RED
+end
 
 local drops = {}
 local boss_by_drop = {} -- to quick backward query by drop prefab name

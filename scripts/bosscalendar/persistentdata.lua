@@ -8,20 +8,16 @@ local PersistentData = Class(function(self, id)
   self.id = id
 end)
 
-local function trim(s) return s:match '^%s*(.*%S)%s*$' or '' end
+local function trim(s) return s:match('^%s*(.*%S)%s*$') or '' end
 
-function PersistentData:GetSaveName()
-  return BRANCH == 'release' and self.id or self.id .. BRANCH
-end
+function PersistentData:GetSaveName() return BRANCH == 'release' and self.id or self.id .. BRANCH end
 
 function PersistentData:SetValue(key, value)
   self.persistdata[key] = value
   self.dirty = true
 end
 
-function PersistentData:GetValue(key)
-  return self.persistdata[key]
-end
+function PersistentData:GetValue(key) return self.persistdata[key] end
 
 function PersistentData:Save(callback)
   if self.dirty then
