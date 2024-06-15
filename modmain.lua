@@ -1,6 +1,6 @@
 local G = GLOBAL
 if G.GetGameModeProperty('level_type') ~= G.LEVELTYPE.SURVIVAL then return end
-local BossCalendar = G.require('screens/bosscalendar')
+local BossCalendar = require('screens/bosscalendar')
 Assets = { Asset('ATLAS', 'images/boss.xml') }
 
 -- load constants and options
@@ -21,7 +21,8 @@ end
 
 -- setup calendar keybind
 local function Validate()
-  local active_screen_name = TheFrontEnd:GetActiveScreen() and TheFrontEnd:GetActiveScreen().name or ''
+  local active_screen = TheFrontEnd:GetActiveScreen()
+  local active_screen_name = active_screen and active_screen.name or ''
   return active_screen_name == 'HUD' or active_screen_name == 'Boss Calendar'
 end
 local function Open()
@@ -33,10 +34,12 @@ end
 G.TheInput:AddKeyDownHandler(G.rawget(G, GetModConfigData('key_to_view')), Open)
 G.TheInput:AddKeyUpHandler(G.rawget(G, GetModConfigData('key_to_view')), Close)
 
+-- initialize after player
 AddPlayerPostInit(function(inst)
   inst:DoTaskInTime(0, function() BossCalendar:Init() end)
 end)
 
+-- validate defeat of boss after loot drop
 for _, drop in pairs(TUNING.BCL.DROPS) do
   AddPrefabPostInit(drop, function(inst)
     inst:DoTaskInTime(0, function()
