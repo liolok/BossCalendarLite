@@ -218,7 +218,6 @@ function BossCalendar:Open()
   if self.open or not self.init then return end
 
   Screen._ctor(self, 'Boss Calendar')
-  self.open = true
 
   if self.root then self.root:Kill() end
   self.root = self:AddChild(Widget('ROOT'))
@@ -250,12 +249,18 @@ function BossCalendar:Open()
     end
   end
 
+  self.open = true
+
   self:Update()
+  self.update_task = ThePlayer:DoPeriodicTask(1, function() self:Update() end)
+
   return true
 end
 
 function BossCalendar:Close()
   if not self.open then return end
+  if self.update_task then self.update_task:Cancel() end
+  self.update_task = nil
   TheFrontEnd:PopScreen(self)
   self.open = false
 end
