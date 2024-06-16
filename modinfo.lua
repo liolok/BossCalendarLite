@@ -66,7 +66,7 @@ configuration_options = {
       { description = 'Chat', data = 'chat', hover = 'Message shows up in chat history, visible to yourself only.' },
       { description = 'Head', data = 'head', hover = 'Message shows upon your player character.' },
     },
-    default = 'head',
+    default = 'chat',
     name = 'remind_position',
   },
   {
@@ -85,7 +85,7 @@ configuration_options = {
   },
   {
     label = 'Duration',
-    hover = 'How long does head message last?',
+    hover = 'How long does head message last? (not for chat message)',
     options = {
       { description = 'Short', data = 3, hover = '3 Seconds' },
       { description = 'Default', data = 5, hover = '5 Seconds' },
