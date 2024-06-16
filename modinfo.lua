@@ -1,7 +1,7 @@
 name = 'Boss Calendar Lite'
 description = 'Calculate and remember when bosses respawn, with click-announcing and auto-reminding.'
 author = 'Boas, xaT2x, iaman2b & liolok'
-version = '2024.06.10.2'
+version = '2024.06.16.1'
 api_version = 10
 dont_starve_compatible = false
 dst_compatible = true
