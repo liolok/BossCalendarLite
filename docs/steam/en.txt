@@ -2,20 +2,35 @@ Calculate and remember when bosses respawn, with click-announcing and auto-remin
 
 By default, press and hold "V" to view the calendar.
 
-[h2]Mod Settings[/h2]
-[list]
-    [*]Key to open the calendar
-    [*]Unit of respawn time: days in game or time in reality
-    [*]Style of game day: absolute or countdown
-    [*]Color of respawn reminder
-    [*]Duration of respawn reminder
-[/list]
+[h2]Known Issues[/h2]
+This is a client-only mod, it only works if you're there when the boss is defeat.
+
+[h3]Loot Stash[/h3]
+Only works for gold chain version during Winter's Feast.
+Timer starts when Klaus is defeat, earlier than Loot Stash being opened.
+
+[h3]Malbatross[/h3]
+By default world settings, it respawns after 5~15 days.
+We take it as 15.
+
+[h3]Terrarium[/h3]
+Once the twins have been summoned at least once, if a single night is spent without summoning them again, the Terrarium immediately enters its dormant state.
+We are not detecting this situation.
+
+[h3]Nightmare Werepig / Scrappy Werepig[/h3]
+At the moment of next day coming, if the defeated variant is still existing in another player's sight, respawn will delay a whole day.
+We have no way to detect this situation.
+
+[h3]Frostjaw[/h3]
+Timer only starts when trading with it, earlier than its actual despawn.
 
 [h2]Credits[/h2]
 [list]
-    [*]Boas: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]original author[/url]
-    [*]xaT2x: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]second contributor[/url]
-    [*]iaman2b: images rework, test
+[*]Boas: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]original author[/url]
+[*]xaT2x: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]second contributor[/url]
+[*]iaman2b: refined hi-res images, test
 [/list]
-[hr][/hr] 
+
+[hr][/hr]
+
 [url=https://github.com/liolok/BossCalendarLite]Source code[/url]

@@ -2,20 +2,35 @@
 
 默认绑定 V 键，按住查看日历。
 
-[h2]模组设置[/h2]
-[list]
-    [*]打开日历用的按键
-    [*]刷新时间的单位：游戏天数/现实时间
-    [*]游戏天数的风格：绝对天数/倒计天数
-    [*]自动提醒的颜色
-    [*]自动提醒的持续时长
-[/list]
+[h2]已知问题[/h2]
+受客户端模组所限，只有你在场的情况才能检测到 Boss 被击败。
+
+[h3]赃物袋[/h3]
+只管冬季盛宴期间的金色锁链版本。
+从克劳斯被击败开始计时，早于打开赃物袋。
+
+[h3]邪天翁[/h3]
+默认世界设置下，会在击败后 5 到 15 天之后刷新。
+本模组按 15 天计。
+
+[h3]盒中泰拉[/h3]
+召唤过双子魔眼一次之后，如果有一整个晚上没有召唤，则盒中泰拉会立即进入冷却。
+本模组不检测这种情况。
+
+[h3]梦魇疯猪 / 拾荒疯猪[/h3]
+击败之后的天亮时分，如果疯猪仍存在于其他玩家的加载范围，刷新会延迟一整天。
+本模组无从检测这种情况。
+
+[h3]大霜鲨[/h3]
+仅支持与其交易开始计时，早于它实际消失。
 
 [h2]致谢[/h2]
 [list]
-    [*]Boas：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]原作者[/url]
-    [*]xaT2x：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]第二任维护者[/url]
-    [*]iaman2b: 贴图素材重做、测试
+[*]Boas：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]原作者[/url]
+[*]xaT2x：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]第二任维护者[/url]
+[*]iaman2b：贴图素材高清重制、测试
 [/list]
-[hr][/hr] 
+
+[hr][/hr]
+
 [url=https://github.com/liolok/BossCalendarLite]源码[/url]
