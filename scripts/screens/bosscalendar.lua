@@ -19,6 +19,7 @@ end
 
 local function Remind(message, duration, color)
   if cooldown.remind then return end
+  cooldown.remind = ThePlayer:DoTaskInTime(30, function() cooldown.remind = nil end)
   color = color or PLAYERCOLOURS[TUNING.BCL.REMIND_COLOR]
   if TUNING.BCL.REMIND_POSITION == 'chat' then
     ChatHistory:OnAnnouncement(message, color) -- ChatHistoryManager:OnAnnouncement(message, colour, announce_type)
@@ -27,7 +28,6 @@ local function Remind(message, duration, color)
     -- Talker:Say(script, time, noanim, force, nobroadcast, colour, ...)
     ThePlayer.components.talker:Say(message, duration or TUNING.BCL.TALK_DURATION, true, true, true, color)
   end
-  cooldown.remind = ThePlayer:DoTaskInTime(30, function() cooldown.remind = nil end)
 end
 
 local function RemindOfflineRespawn(bosses)
@@ -100,15 +100,14 @@ function BossCalendar:Init()
   self.init = true
 end
 
-local function SearchBossByDrop(inst)
-  local drop = inst.prefab
+local function SearchBossByDrop(inst, drop)
   if not ThePlayer or cooldown[drop] then return nil end
   cooldown[drop] = ThePlayer:DoTaskInTime(3, function() cooldown[drop] = nil end)
   return FindEntity(inst, 15, nil, { 'epic' })
 end
 
 function BossCalendar:ValidateDefeatByDrop(inst)
-  local e = SearchBossByDrop(inst) -- entity of boss
+  local e = SearchBossByDrop(inst, inst.prefab) -- entity of boss
   if not e or not e:IsValid() then return end
 
   local boss = TUNING.BCL.BOSS_BY_DROP[inst.prefab]
@@ -194,8 +193,8 @@ end
 
 function BossCalendar:OnClick(boss)
   if cooldown.announce then return end
-  local message = self.timestamp[boss].respawn and self:AnnounceTimeStyle(boss, true) or FMT(STRINGS.BCL.OC, boss)
   cooldown.announce = ThePlayer:DoTaskInTime(5, function() cooldown.announce = nil end)
+  local message = self.timestamp[boss].respawn and self:AnnounceTimeStyle(boss, true) or FMT(STRINGS.BCL.OC, boss)
   TheNet:Say(STRINGS.LMB .. ' ' .. message)
 end
 
