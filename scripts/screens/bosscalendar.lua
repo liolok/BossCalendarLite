@@ -18,6 +18,7 @@ local function FMT(s, boss, time)
 end
 
 local function Remind(message, duration, color)
+  if cooldown.remind then return end
   color = color or PLAYERCOLOURS[TUNING.BCL.REMIND_COLOR]
   if TUNING.BCL.REMIND_POSITION == 'chat' then
     ChatHistory:OnAnnouncement(message, color) -- ChatHistoryManager:OnAnnouncement(message, colour, announce_type)
@@ -26,6 +27,7 @@ local function Remind(message, duration, color)
     -- Talker:Say(script, time, noanim, force, nobroadcast, colour, ...)
     ThePlayer.components.talker:Say(message, duration or TUNING.BCL.TALK_DURATION, true, true, true, color)
   end
+  cooldown.remind = ThePlayer:DoTaskInTime(30, function() cooldown.remind = nil end)
 end
 
 local function RemindOfflineRespawn(bosses)
