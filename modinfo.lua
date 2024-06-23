@@ -1,7 +1,7 @@
 name = 'Boss Calendar Lite'
 description = 'Calculate and remember when bosses respawn, with click-announcing and auto-reminding.'
 author = 'Boas, xaT2x, iaman2b & liolok'
-version = '2024.06.17.1'
+version = '2024.06.23.1'
 api_version = 10
 dont_starve_compatible = false
 dst_compatible = true
@@ -39,9 +39,9 @@ configuration_options = {
     label = 'Calendar',
     hover = 'How respawn time shows up in calendar.',
     options = { -- function names from BossCalendar class
-      { description = 'Day', data = 'AbsoluteGameDay', hover = 'Day 21.1' },
-      { description = 'Days', data = 'CountdownGameDays', hover = '19.9d' },
-      { description = 'Time', data = 'CountdownRealTime', hover = '1h 30m' },
+      { description = 'Day', data = 'AbsoluteGameDay', hover = 'Day 21.10' },
+      { description = 'Days', data = 'CountdownGameDays', hover = '19.99d' },
+      { description = 'Time', data = 'CountdownRealTime', hover = 'hh:mm:ss' },
     },
     default = 'CountdownGameDays',
     name = 'calendar_time_style',
@@ -50,8 +50,8 @@ configuration_options = {
     label = 'Announce',
     hover = 'How do you announce respawn time.',
     options = { -- function names from BossCalendar class
-      { description = 'Day', data = 'AbsoluteGameDay', hover = 'Dragonfly will repsawn on day 21.1.' },
-      { description = 'Days', data = 'CountdownGameDays', hover = 'Dragonfly will repsawn in 19.9 days.' },
+      { description = 'Day', data = 'AbsoluteGameDay', hover = 'Dragonfly will repsawn on day 21.10.' },
+      { description = 'Days', data = 'CountdownGameDays', hover = 'Dragonfly will repsawn in 19.99 days.' },
       { description = 'Time', data = 'CountdownRealTime', hover = 'Dragonfly will repsawn in 1 hour 30 minutes.' },
     },
     default = 'CountdownGameDays',
