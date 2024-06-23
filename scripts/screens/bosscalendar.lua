@@ -22,7 +22,8 @@ local function Remind(message, duration, color)
   cooldown.remind = ThePlayer:DoTaskInTime(30, function() cooldown.remind = nil end)
   color = color or PLAYERCOLOURS[TUNING.BCL.REMIND_COLOR]
   if TUNING.BCL.REMIND_POSITION == 'chat' then
-    ChatHistory:OnAnnouncement(message, color) -- ChatHistoryManager:OnAnnouncement(message, colour, announce_type)
+    -- ChatHistoryManager:OnAnnouncement(message, colour, announce_type)
+    ChatHistory:OnAnnouncement(message, color, 'default')
   elseif TUNING.BCL.REMIND_POSITION == 'head' then
     if not ThePlayer.components.talker then return end
     -- Talker:Say(script, time, noanim, force, nobroadcast, colour, ...)

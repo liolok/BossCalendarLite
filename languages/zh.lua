@@ -5,18 +5,18 @@ GLOBAL.STRINGS.BCL = {
   -- OfflineRespawnRemind()
   AND = '和',
   ANDS = '、',
-  HAS = ' 已',
-  HAVE = ' 均已',
-  ORR = '󰀀 {bosses}{have}在离线期间刷新。',
+  HAS = '已',
+  HAVE = '均已',
+  ORR = '{bosses}{have}在离线期间刷新。',
 
   -- OnTimerDone()
-  OTD = '󰀘 {boss}刚刚刷新。',
+  OTD = '{boss}刚刚刷新。',
 
   -- OnClick()
   OC = '{boss}应已就绪。',
 
   -- CheckDaywalkerAround()
-  CDA = '󰀀 {boss}仍在附近，刷新将会延迟一天。',
+  CDA = '{boss}仍在附近，刷新将会延迟一天。',
 
   -- AbsoluteGameDay()
   AGD_LONG = '{boss}将在第 {time} 天刷新。',

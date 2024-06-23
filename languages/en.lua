@@ -7,16 +7,16 @@ GLOBAL.STRINGS.BCL = {
   ANDS = ', ',
   HAS = ' has',
   HAVE = ' have',
-  ORR = '󰀀 {bosses} {have} already respawned during offline.',
+  ORR = '{bosses} {have} already respawned during offline.',
 
   -- OnTimerDone()
-  OTD = '󰀘 {boss} has just respawned.',
+  OTD = '{boss} has just respawned.',
 
   -- OnClick()
   OC = '{boss} should be ready.',
 
   -- CheckDaywalkerAround()
-  CDA = '󰀀 {boss} is still around, respawn will delay one day.',
+  CDA = '{boss} is still around, respawn will delay one day.',
 
   -- AbsoluteGameDay()
   AGD_LONG = '{boss} will respawn on day {time}.',
