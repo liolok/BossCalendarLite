@@ -67,7 +67,7 @@ configuration_options = {
       { description = 'Days', data = 'CountdownGameDays', hover = 'Dragonfly will repsawn in 19.99 days.' },
       { description = 'Time', data = 'CountdownRealTime', hover = 'Dragonfly will repsawn in 1 hour 30 minutes.' },
     },
-    default = 'CountdownGameDays',
+    default = 'AbsoluteGameDay',
     name = 'announce_time_style',
   },
 
