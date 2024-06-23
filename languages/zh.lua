@@ -29,13 +29,10 @@ GLOBAL.STRINGS.BCL = {
 
   -- CountdownRealTime()
   CRT = '{boss}将在 {time}之后刷新。',
-  H = ' 时',
   HOUR = ' 小时',
   HOURS = ' 小时',
-  M = ' 分',
   MINUTE = ' 分钟',
   MINUTES = ' 分钟',
-  S = ' 秒',
   SECOND = ' 秒钟',
   SECONDS = ' 秒钟',
 }

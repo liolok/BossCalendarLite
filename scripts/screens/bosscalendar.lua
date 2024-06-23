@@ -178,17 +178,15 @@ end
 
 function BossCalendar:CountdownRealTime(boss, announce)
   local delta = math.max(0, self.timestamp[boss].respawn - Now())
-  local hour = math.floor(delta / 3600)
-  local minute = math.floor(delta % 3600 / 60)
-  local second = math.ceil(delta)
-  local unit = (not announce) and STRINGS.BCL.H or (hour == 1) and STRINGS.BCL.HOUR or STRINGS.BCL.HOURS
-  local time = (hour > 0) and (hour .. unit) or ''
-  unit = (not announce) and STRINGS.BCL.M or (minute == 1) and STRINGS.BCL.MINUTE or STRINGS.BCL.MINUTES
-  local seperator = (time == '') and '' or ' '
-  time = (minute > 0) and (time .. seperator .. minute .. unit) or time
-  unit = (not announce) and STRINGS.BCL.S or (second == 1) and STRINGS.BCL.SECOND or STRINGS.BCL.SECONDS
-  time = (time == '') and (second .. unit) or time
-  return announce and FMT(STRINGS.BCL.CRT, boss, time) or time
+  local h = math.floor(delta / 3600)
+  local m = math.floor(delta % 3600 / 60)
+  local s = math.ceil(delta % 60)
+  if not announce then return string.format('%02d:%02d:%02d', h, m, s) end
+  local time = {}
+  if h > 0 then table.insert(time, h .. (h == 1 and STRINGS.BCL.HOUR or STRINGS.BCL.HOURS)) end
+  if m > 0 then table.insert(time, m .. (m == 1 and STRINGS.BCL.MINUTE or STRINGS.BCL.MINUTES)) end
+  if s > 0 then table.insert(time, s .. (s == 1 and STRINGS.BCL.SECOND or STRINGS.BCL.SECONDS)) end
+  return FMT(STRINGS.BCL.CRT, boss, table.concat(time, ' '))
 end
 
 function BossCalendar:OnClick(boss)

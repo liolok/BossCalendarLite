@@ -29,13 +29,10 @@ GLOBAL.STRINGS.BCL = {
 
   -- CountdownRealTime()
   CRT = '{boss} will respawn in {time}',
-  H = 'h',
   HOUR = ' hour',
   HOURS = ' hours',
-  M = 'm',
   MINUTE = ' minute',
   MINUTES = ' minutes',
-  S = 's',
   SECOND = ' second',
   SECONDS = ' seconds',
 }
