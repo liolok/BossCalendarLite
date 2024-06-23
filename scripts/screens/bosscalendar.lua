@@ -165,13 +165,13 @@ function BossCalendar:Name(boss)
 end
 
 function BossCalendar:AbsoluteGameDay(boss, announce)
-  local day = string.format('%.1f', 1 + (self.timestamp[boss].respawn / TUNING.TOTAL_DAY_TIME))
+  local day = string.format('%.2f', 1 + (self.timestamp[boss].respawn / TUNING.TOTAL_DAY_TIME))
   return announce and FMT(STRINGS.BCL.AGD_LONG, boss, day) or FMT(STRINGS.BCL.AGD_SHORT, nil, day)
 end
 
 function BossCalendar:CountdownGameDays(boss, announce)
   local delta = math.max(0, self.timestamp[boss].respawn - Now())
-  local days = string.format('%.1f', delta / TUNING.TOTAL_DAY_TIME)
+  local days = string.format('%.2f', delta / TUNING.TOTAL_DAY_TIME)
   days = days .. (tonumber(days) <= 1 and STRINGS.BCL.DAY or STRINGS.BCL.DAYS)
   return announce and FMT(STRINGS.BCL.CGD, boss, days) or days
 end
