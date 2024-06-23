@@ -7,7 +7,6 @@ This is a client-only mod, it only works if you're there when the boss is defeat
 
 [h3]Loot Stash[/h3]
 Only works for gold chain version during Winter's Feast.
-Timer starts when Klaus is defeat, earlier than Loot Stash being opened.
 
 [h3]Malbatross[/h3]
 By default world settings, it respawns after 5~15 days.
