@@ -28,6 +28,7 @@ Timer only starts when trading with it, earlier than its actual despawn.
 [*]Boas: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]original author[/url]
 [*]xaT2x: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]second contributor[/url]
 [*]iaman2b: refined hi-res images, test
+[*]Huxi: Loot Stash opening detect logic
 [/list]
 
 [hr][/hr]

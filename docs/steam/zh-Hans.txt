@@ -28,6 +28,7 @@
 [*]Boas：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]原作者[/url]
 [*]xaT2x：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]第二任维护者[/url]
 [*]iaman2b：贴图素材高清重制、测试
+[*]呼吸：打开赃物袋的检测逻辑
 [/list]
 
 [hr][/hr]

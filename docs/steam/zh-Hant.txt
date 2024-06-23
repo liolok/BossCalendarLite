@@ -28,6 +28,7 @@
 [*]Boas：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]原作者[/url]
 [*]xaT2x：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]第二任維護者[/url]
 [*]iaman2b：貼圖素材高清重製、測試
+[*]呼吸：打開贓物袋的檢測邏輯
 [/list]
 
 [hr][/hr]
