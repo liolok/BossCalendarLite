@@ -33,6 +33,19 @@ configuration_options = {
     default = 'KEY_V',
     name = 'key_to_view',
   },
+  {
+    label = 'Font Size',
+    hover = 'How big should the calendar text be?',
+    options = {
+      { description = '24', data = 24, hover = 'Turn up if feeling too small.' },
+      { description = '26', data = 26 },
+      { description = '28', data = 28 },
+      { description = '30', data = 30 },
+      { description = '32', data = 32, hover = 'Text may become blank if too long.' },
+    },
+    default = '24',
+    name = 'calendar_font_size',
+  },
 
   { name = 'Time Style', options = { { description = '', data = 0 } }, default = 0 },
   {

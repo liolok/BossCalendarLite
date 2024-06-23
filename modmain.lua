@@ -5,6 +5,7 @@ Assets = { Asset('ATLAS', 'images/boss.xml') }
 
 -- load constants and options
 modimport('tuning')
+TUNING.BCL.FONT_SIZE = GetModConfigData('calendar_font_size')
 TUNING.BCL.CALENDAR_TIME_STYLE = GetModConfigData('calendar_time_style')
 TUNING.BCL.ANNOUNCE_TIME_STYLE = GetModConfigData('announce_time_style')
 TUNING.BCL.REMIND_POSITION = GetModConfigData('remind_position')

@@ -237,7 +237,7 @@ function BossCalendar:Open()
   for i, boss in ipairs(TUNING.BCL.BOSS) do
     local x, y = (i - 1) % 5 * 120 - 240, -130 * math.floor((i - 1) / 5)
     local txt, img = 'text_' .. boss, 'image_' .. boss
-    self[txt] = self.root:AddChild(Text(UIFONT, 32))
+    self[txt] = self.root:AddChild(Text(UIFONT, TUNING.BCL.FONT_SIZE))
     self[txt]:SetPosition(x, y + 80)
     self[txt]:SetString(self:Name(boss))
     self[img] = self.root:AddChild(Image('images/boss.xml', boss .. '.tex'))
