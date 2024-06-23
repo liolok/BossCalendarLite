@@ -71,7 +71,7 @@ function BossCalendar:Load()
   end
 
   self:Save()
-  ThePlayer:DoTaskInTime(5, RemindOfflineRespawn(respawned))
+  ThePlayer:DoTaskInTime(10, function() RemindOfflineRespawn(respawned) end)
 end
 
 -- General
