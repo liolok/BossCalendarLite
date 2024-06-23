@@ -49,7 +49,7 @@ local info = { -- all other information of bosses
   },
   terrarium = { -- Terrarium
     DROPS = { 'eyemaskhat', 'shieldofterror' },
-    ANIMS = { 'death', 'defeat' },
+    ANIMS = { 'death' },
     RESPAWN_INTERVAL = TUNING.EYEOFTERROR_SPAWNDELAY,
   },
   daywalker = { -- Nightmare Werepig
