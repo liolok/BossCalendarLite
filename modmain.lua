@@ -48,3 +48,13 @@ for _, drop in pairs(TUNING.BCL.DROPS) do
     end)
   end)
 end
+
+-- Loot Stash
+-- Credit: Huxi, 3161117403/modtable/61.lua:120-130, InitPrefab("klaus_sack", ...)
+AddPrefabPostInit('klaus_sack', function(inst)
+  inst:ListenForEvent('onremove', function(inst)
+    if not G.IsSpecialEventActive('winters_feast') then return end -- Winter's Feast
+    if not G.FindEntity(inst, 4, nil, { 'bundle' }) then return end -- Gift or Bundled Supplies
+    BossCalendar:OnDefeat('klaus_sack')
+  end)
+end)

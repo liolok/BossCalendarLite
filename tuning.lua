@@ -28,8 +28,8 @@ local info = { -- all other information of bosses
     RESPAWN_INTERVAL = TUNING.BEEQUEEN_RESPAWN_TIME,
   },
   klaus_sack = { -- Loot Stash
-    DROPS = { 'klaussackkey' },
-    ANIMS = { 'death' },
+    DROPS = {}, -- we don't validate opening by loot drop, but listen for 'onremove' event instead.
+    ANIMS = {}, -- we don't validate opening by animation, but listen for 'onremove' event instead.
     RESPAWN_INTERVAL = TUNING.KLAUSSACK_EVENT_RESPAWN_TIME,
   },
   stalker_atrium = { -- Fuelweaver

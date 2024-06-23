@@ -137,7 +137,6 @@ end
 function BossCalendar:OnDefeat(boss)
   if not self.init then return end
   if self.timestamp[boss:gsub('%d', '')].respawn then return end -- remove 2 from daywalker2
-  if boss == 'klaus_sack' and not IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) then return end
 
   local interval = TUNING.BCL.INFO[boss].RESPAWN_INTERVAL
 
