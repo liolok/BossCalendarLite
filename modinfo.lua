@@ -43,7 +43,7 @@ configuration_options = {
       { description = '30', data = 30 },
       { description = '32', data = 32, hover = 'Text may become blank if too long.' },
     },
-    default = '24',
+    default = 24,
     name = 'calendar_font_size',
   },
 
