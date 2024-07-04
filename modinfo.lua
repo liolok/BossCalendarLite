@@ -11,27 +11,29 @@ icon_atlas = 'modicon.xml'
 icon = 'modicon.tex'
 
 -- stylua: ignore
-local keys = {
+local keys = { -- from STRINGS.UI.CONTROLSSCREEN.INPUTS[1] of strings.lua, need to match constants.lua too.
   'Escape', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Print', 'ScrolLock', 'Pause',
-  'Tilde', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'Minus', 'Equals', 'Backspace',
-  'Tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'LeftBracket', 'RightBracket', 'Backslash',
-  'CapsLock', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Semicolon', 'Enter',
-  'LShift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Period', 'Slash', 'RShift', 'LCtrl', 'LAlt', 'Space', 'RAlt', 'RCtrl',
-  'Insert', 'Delete', 'Home', 'End', 'PageUp', 'PageDown', 'Up', 'Down', 'Left', 'Right',
-  'Keypad 0', 'Keypad 1', 'Keypad 2', 'Keypad 3', 'Keypad 4', 'Keypad 5', 'Keypad 6', 'Keypad 7', 'Keypad 8', 'Keypad 9',
-  'Keypad Divide', 'Keypad Multiply', 'Keypad Minus', 'Keypad Plus', 'Keypad Enter', 'Keypad Equals',
+  '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+  'Tab', 'CapsLock', 'LShift', 'LCtrl', 'LAlt', 'Space', 'RAlt', 'RCtrl', 'Period', 'Slash', 'RShift',
+  'Minus', 'Equals', 'Backspace', 'LeftBracket', 'RightBracket', 'Backslash', 'Semicolon', 'Enter',
+  'Up', 'Down', 'Left', 'Right', 'Insert', 'Delete', 'Home', 'End', 'PageUp', 'PageDown', -- navigation
+  'Num 0', 'Num 1', 'Num 2', 'Num 3', 'Num 4', 'Num 5', 'Num 6', 'Num 7', 'Num 8', 'Num 9', -- numberic keypad
+  'Num Period', 'Num Divide', 'Num Multiply', 'Num Minus', 'Num Plus', 'Num Enter',
 }
 for i = 1, #keys do
-  keys[i] = { description = keys[i], data = 'KEY_' .. keys[i]:gsub('Keypad ', 'KP_'):upper() }
+  local key = 'KEY_' .. keys[i]:gsub('Num ', 'KP_'):upper()
+  keys[i] = { description = keys[i], data = (keys[i] ~= 'Disabled') and key or false }
 end
 
 configuration_options = {
   {
-    label = 'Keybind',
-    hover = 'Assign a key, press and hold to view calendar.',
+    label = 'View Key',
+    hover = 'Bind a key, press and hold to view calendar.',
     options = keys,
     default = 'KEY_V',
     name = 'key_to_view',
+    is_keybind = true,
   },
   {
     label = 'Font Size',
