@@ -95,6 +95,7 @@ AddClassPostConstruct('screens/redux/modconfigurationscreen', function(self)
   local modded_button = 'keybind_button@' .. self.modname -- avoid messing with others
 
   for _, widget in ipairs(self.options_scroll_list.widgets_to_update) do
+    if widget.opt[modded_button] then return end -- avoid overlapping when multiple mods run this code
     local button = KeyBindButton(function(value)
       if value ~= widget.opt.data.initial_value then self:MakeDirty() end
       self.options[widget.real_index].value = value
