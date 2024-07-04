@@ -19,7 +19,7 @@ local keys = { -- from STRINGS.UI.CONTROLSSCREEN.INPUTS[1] of strings.lua, need 
   'Minus', 'Equals', 'Backspace', 'LeftBracket', 'RightBracket', 'Backslash', 'Semicolon', 'Enter',
   'Up', 'Down', 'Left', 'Right', 'Insert', 'Delete', 'Home', 'End', 'PageUp', 'PageDown', -- navigation
   'Num 0', 'Num 1', 'Num 2', 'Num 3', 'Num 4', 'Num 5', 'Num 6', 'Num 7', 'Num 8', 'Num 9', -- numberic keypad
-  'Num Period', 'Num Divide', 'Num Multiply', 'Num Minus', 'Num Plus', 'Num Enter',
+  'Num Period', 'Num Divide', 'Num Multiply', 'Num Minus', 'Num Plus',
 }
 for i = 1, #keys do
   local key = 'KEY_' .. keys[i]:gsub('Num ', 'KP_'):upper()
