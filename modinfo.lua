@@ -26,6 +26,8 @@ for i = 1, #keys do
   keys[i] = { description = keys[i], data = (keys[i] ~= 'Disabled') and key or false }
 end
 
+local function h(title) return { name = title, options = { { description = '', data = 0 } }, default = 0 } end -- header
+
 configuration_options = {
   {
     label = 'View Key',
@@ -49,7 +51,7 @@ configuration_options = {
     name = 'calendar_font_size',
   },
 
-  { name = 'Time Style', options = { { description = '', data = 0 } }, default = 0 },
+  h('Time Style'),
   {
     label = 'Calendar',
     hover = 'How respawn time shows up in calendar.',
@@ -73,7 +75,7 @@ configuration_options = {
     name = 'announce_time_style',
   },
 
-  { name = 'Remind', options = { { description = '', data = 0 } }, default = 0 },
+  h('Remind'),
   {
     label = 'Position',
     hover = 'Where should message appear?',
