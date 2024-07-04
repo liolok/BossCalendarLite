@@ -2,6 +2,7 @@ local G = GLOBAL
 if G.GetGameModeProperty('level_type') ~= G.LEVELTYPE.SURVIVAL then return end
 local BossCalendar = require('screens/bosscalendar')
 Assets = { Asset('ATLAS', 'images/boss.xml') }
+modimport('keybind') -- refine key binding UI
 
 -- load constants and options
 modimport('tuning')
