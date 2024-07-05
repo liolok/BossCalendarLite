@@ -2,16 +2,9 @@ local G = GLOBAL
 if G.GetGameModeProperty('level_type') ~= G.LEVELTYPE.SURVIVAL then return end
 local BossCalendar = require('screens/bosscalendar')
 Assets = { Asset('ATLAS', 'images/boss.xml') }
-modimport('keybind') -- refine key binding UI
 
--- load constants and options
-modimport('tuning')
-TUNING.BCL.FONT_SIZE = GetModConfigData('calendar_font_size')
-TUNING.BCL.CALENDAR_TIME_STYLE = GetModConfigData('calendar_time_style')
-TUNING.BCL.ANNOUNCE_TIME_STYLE = GetModConfigData('announce_time_style')
-TUNING.BCL.REMIND_POSITION = GetModConfigData('remind_position')
-TUNING.BCL.REMIND_COLOR = GetModConfigData('remind_color')
-TUNING.BCL.TALK_DURATION = GetModConfigData('talk_duration')
+modimport('keybind') -- refine key binding UI
+modimport('tuning') -- load constants and options
 
 -- load translation strings
 local loc, exist = G.GetCurrentLocale(), G.kleifileexists

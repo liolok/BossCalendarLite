@@ -72,7 +72,7 @@ local S = {
       zh = '宣告',
       zht = '宣告',
       DETAIL = {
-        'How do you announce respawn time.',
+        'How to announce respawn time.',
         zh = '如何宣告刷新时间',
         zht = '如何宣告刷新時間',
       },
@@ -179,39 +179,39 @@ for i = 1, #keys do
   keys[i] = { description = keys[i], data = 'KEY_' .. keys[i]:gsub('^Num ', 'KP_'):upper() }
 end
 
-local function h(title) return { name = title, options = { { description = '', data = 0 } }, default = 0 } end -- header
+local function H(title) return { name = T(title), options = { { description = '', data = 0 } }, default = 0 } end -- header
 
 configuration_options = {
   {
     label = T(S.VIEW_KEY),
     hover = T(S.VIEW_KEY.DETAIL),
     options = keys,
+    is_keybind = true,
     default = 'KEY_V',
     name = 'key_to_view',
-    is_keybind = true,
   },
   {
     label = T(S.FONT_SIZE),
     hover = T(S.FONT_SIZE.DETAIL),
     options = {
-      { description = '24', data = 24, hover = T(S.FONT_SIZE.SMALL) },
-      { description = '26', data = 26 },
-      { description = '28', data = 28 },
-      { description = '30', data = 30 },
-      { description = '32', data = 32, hover = T(S.FONT_SIZE.BIG) },
+      { data = 24, description = '24', hover = T(S.FONT_SIZE.SMALL) },
+      { data = 26, description = '26' },
+      { data = 28, description = '28' },
+      { data = 30, description = '30' },
+      { data = 32, description = '32', hover = T(S.FONT_SIZE.BIG) },
     },
     default = 24,
     name = 'calendar_font_size',
   },
 
-  h(T(S.TIME_STYLE)),
+  H(S.TIME_STYLE),
   {
     label = T(S.TIME_STYLE.CALENDAR),
     hover = T(S.TIME_STYLE.CALENDAR.DETAIL),
     options = { -- function names from BossCalendar class
-      { description = T(S.TIME_STYLE.DAY), data = 'AbsoluteGameDay', hover = T(S.TIME_STYLE.CALENDAR.AGD) },
-      { description = T(S.TIME_STYLE.DAYS), data = 'CountdownGameDays', hover = T(S.TIME_STYLE.CALENDAR.CGD) },
-      { description = T(S.TIME_STYLE.TIME), data = 'CountdownRealTime', hover = 'hh:mm:ss' },
+      { data = 'AbsoluteGameDay', description = T(S.TIME_STYLE.DAY), hover = T(S.TIME_STYLE.CALENDAR.AGD) },
+      { data = 'CountdownGameDays', description = T(S.TIME_STYLE.DAYS), hover = T(S.TIME_STYLE.CALENDAR.CGD) },
+      { data = 'CountdownRealTime', description = T(S.TIME_STYLE.TIME), hover = 'hh:mm:ss' },
     },
     default = 'CountdownGameDays',
     name = 'calendar_time_style',
@@ -220,21 +220,21 @@ configuration_options = {
     label = T(S.TIME_STYLE.ANNOUNCE),
     hover = T(S.TIME_STYLE.ANNOUNCE.DETAIL),
     options = { -- function names from BossCalendar class
-      { description = T(S.TIME_STYLE.DAY), data = 'AbsoluteGameDay', hover = T(S.TIME_STYLE.ANNOUNCE.AGD) },
-      { description = T(S.TIME_STYLE.DAYS), data = 'CountdownGameDays', hover = T(S.TIME_STYLE.ANNOUNCE.CGD) },
-      { description = T(S.TIME_STYLE.TIME), data = 'CountdownRealTime', hover = T(S.TIME_STYLE.ANNOUNCE.CRT) },
+      { data = 'AbsoluteGameDay', description = T(S.TIME_STYLE.DAY), hover = T(S.TIME_STYLE.ANNOUNCE.AGD) },
+      { data = 'CountdownGameDays', description = T(S.TIME_STYLE.DAYS), hover = T(S.TIME_STYLE.ANNOUNCE.CGD) },
+      { data = 'CountdownRealTime', description = T(S.TIME_STYLE.TIME), hover = T(S.TIME_STYLE.ANNOUNCE.CRT) },
     },
     default = 'AbsoluteGameDay',
     name = 'announce_time_style',
   },
 
-  h(T(S.REMIND)),
+  H(S.REMIND),
   {
     label = T(S.REMIND.POSITION),
     hover = T(S.REMIND.POSITION.DETAIL),
     options = {
-      { description = T(S.REMIND.POSITION.CHAT), data = 'chat', hover = T(S.REMIND.POSITION.CHAT.DETAIL) },
-      { description = T(S.REMIND.POSITION.HEAD), data = 'head', hover = T(S.REMIND.POSITION.HEAD.DETAIL) },
+      { data = 'chat', description = T(S.REMIND.POSITION.CHAT), hover = T(S.REMIND.POSITION.CHAT.DETAIL) },
+      { data = 'head', description = T(S.REMIND.POSITION.HEAD), hover = T(S.REMIND.POSITION.HEAD.DETAIL) },
     },
     default = 'chat',
     name = 'remind_position',
@@ -243,12 +243,12 @@ configuration_options = {
     label = T(S.REMIND.COLOR),
     hover = T(S.REMIND.COLOR.DETAIL),
     options = { -- will use PLAYERCOLOURS from constants.lua
-      { description = T(S.REMIND.COLOR.RED), data = 'RED' },
-      { description = T(S.REMIND.COLOR.BLUE), data = 'BLUE' },
-      { description = T(S.REMIND.COLOR.PURPLE), data = 'PURPLE' },
-      { description = T(S.REMIND.COLOR.ORANGE), data = 'ORANGE' },
-      { description = T(S.REMIND.COLOR.YELLOW), data = 'YELLOW' },
-      { description = T(S.REMIND.COLOR.GREEN), data = 'GREEN' },
+      { data = 'RED', description = T(S.REMIND.COLOR.RED) },
+      { data = 'BLUE', description = T(S.REMIND.COLOR.BLUE) },
+      { data = 'PURPLE', description = T(S.REMIND.COLOR.PURPLE) },
+      { data = 'ORANGE', description = T(S.REMIND.COLOR.ORANGE) },
+      { data = 'YELLOW', description = T(S.REMIND.COLOR.YELLOW) },
+      { data = 'GREEN', description = T(S.REMIND.COLOR.GREEN) },
     },
     default = 'GREEN',
     name = 'remind_color',
@@ -257,9 +257,9 @@ configuration_options = {
     label = T(S.REMIND.DURATION),
     hover = T(S.REMIND.DURATION.DETAIL),
     options = {
-      { description = T(S.REMIND.DURATION.SHORT), data = 3, hover = '3s' },
-      { description = T(S.REMIND.DURATION.DEFAULT), data = 5, hover = '5s' },
-      { description = T(S.REMIND.DURATION.LONG), data = 7, hover = '7s' },
+      { data = 3, hover = '3s', description = T(S.REMIND.DURATION.SHORT) },
+      { data = 5, hover = '5s', description = T(S.REMIND.DURATION.DEFAULT) },
+      { data = 7, hover = '7s', description = T(S.REMIND.DURATION.LONG) },
     },
     default = 5,
     name = 'talk_duration',

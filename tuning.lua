@@ -85,9 +85,15 @@ for boss, i in pairs(info) do
   end
 end
 
-GLOBAL.TUNING.BCL = { -- create our mod name space
+GLOBAL.TUNING.BCL = { -- create our mod namespace
   BOSS = BOSS,
   INFO = info,
   DROPS = drops,
   BOSS_BY_DROP = boss_by_drop,
+  FONT_SIZE = GetModConfigData('calendar_font_size'),
+  CALENDAR_TIME_STYLE = GetModConfigData('calendar_time_style'),
+  ANNOUNCE_TIME_STYLE = GetModConfigData('announce_time_style'),
+  REMIND_POSITION = GetModConfigData('remind_position'),
+  REMIND_COLOR = GetModConfigData('remind_color'),
+  TALK_DURATION = GetModConfigData('talk_duration'),
 }
