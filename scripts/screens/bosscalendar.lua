@@ -174,7 +174,7 @@ function BossCalendar:CountdownGameDays(boss, announce)
 end
 
 function BossCalendar:CountdownRealTime(boss, announce)
-  local delta = math.max(0, self.timestamp[boss].respawn - Now())
+  local delta = math.ceil(math.max(0, self.timestamp[boss].respawn - Now()))
   local h = math.floor(delta / 3600)
   local m = math.floor(delta % 3600 / 60)
   local s = math.floor(delta % 60)
@@ -235,7 +235,7 @@ function BossCalendar:Show() -- DoInit(), screens/playerstatusscreen.lua
     self[txt] = self.root:AddChild(Text(UIFONT, TUNING.BCL.FONT_SIZE))
     self[txt]:SetPosition(x, y + 80)
     self[img] = self.root:AddChild(Image('images/boss.xml', boss .. '.tex'))
-    self[img]:SetSize(68, 68)
+    self[img]:SetSize(100, 100)
     self[img]:SetPosition(x, y + 20)
     self[img].OnMouseButton = function(_, button, down)
       if button == MOUSEBUTTON_LEFT and down then self:OnClick(boss) end
