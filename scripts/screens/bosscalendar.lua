@@ -177,7 +177,7 @@ function BossCalendar:CountdownRealTime(boss, announce)
   local delta = math.max(0, self.timestamp[boss].respawn - Now())
   local h = math.floor(delta / 3600)
   local m = math.floor(delta % 3600 / 60)
-  local s = math.ceil(delta % 60)
+  local s = math.floor(delta % 60)
   if not announce then return string.format('%02d:%02d:%02d', h, m, s) end
   local time = {}
   if h > 0 then table.insert(time, h .. (h == 1 and STRINGS.BCL.HOUR or STRINGS.BCL.HOURS)) end
