@@ -22,12 +22,10 @@ local function Remind(message, duration, color)
   cooldown.remind = ThePlayer:DoTaskInTime(30, function() cooldown.remind = nil end)
   color = color or PLAYERCOLOURS[TUNING.BCL.REMIND_COLOR]
   if TUNING.BCL.REMIND_POSITION == 'chat' then
-    -- ChatHistoryManager:OnAnnouncement(message, colour, announce_type)
-    ChatHistory:OnAnnouncement(message, color, 'default')
+    ChatHistory:OnAnnouncement(message, color, 'default') -- ChatHistoryManager:OnAnnouncement(message, colour, announce_type)
   elseif TUNING.BCL.REMIND_POSITION == 'head' then
     if not ThePlayer.components.talker then return end
-    -- Talker:Say(script, time, noanim, force, nobroadcast, colour, ...)
-    ThePlayer.components.talker:Say(message, duration or TUNING.BCL.TALK_DURATION, true, true, true, color)
+    ThePlayer.components.talker:Say(message, duration or TUNING.BCL.TALK_DURATION, true, true, true, color) -- Talker:Say(script, time, noanim, force, nobroadcast, colour, ...)
   end
 end
 
@@ -44,7 +42,6 @@ function BossCalendar:Save()
   Data:SetValue(self.session_id .. '_timestamp', self.timestamp)
   Data:SetValue(self.session_id .. '_is_daywalker2', self.is_daywalker2)
   Data:Save()
-  self:Update()
 end
 
 function BossCalendar:Load()
@@ -197,7 +194,6 @@ function BossCalendar:OnClick(boss)
 end
 
 function BossCalendar:Update()
-  if not self.open or not self.init then return end
   for _, boss in ipairs(TUNING.BCL.BOSS) do
     local txt, img = 'text_' .. boss, 'image_' .. boss
     if self.timestamp[boss].respawn then -- display respawn time information
@@ -213,9 +209,8 @@ function BossCalendar:Update()
   end
 end
 
-function BossCalendar:Open()
-  if self.open or not self.init then return end
-
+function BossCalendar:Show() -- DoInit(), screens/playerstatusscreen.lua
+  if not self.init then return end
   Screen._ctor(self, 'Boss Calendar')
 
   if self.root then self.root:Kill() end
@@ -239,7 +234,6 @@ function BossCalendar:Open()
     local txt, img = 'text_' .. boss, 'image_' .. boss
     self[txt] = self.root:AddChild(Text(UIFONT, TUNING.BCL.FONT_SIZE))
     self[txt]:SetPosition(x, y + 80)
-    self[txt]:SetString(self:Name(boss))
     self[img] = self.root:AddChild(Image('images/boss.xml', boss .. '.tex'))
     self[img]:SetSize(68, 68)
     self[img]:SetPosition(x, y + 20)
@@ -248,20 +242,14 @@ function BossCalendar:Open()
     end
   end
 
-  self.open = true
-
   self:Update()
   self.update_task = ThePlayer:DoPeriodicTask(1, function() self:Update() end)
-
-  return true
+  TheFrontEnd:PushScreen(self)
 end
 
-function BossCalendar:Close()
-  if not self.open then return end
+function BossCalendar:Hide()
   if self.update_task then self.update_task:Cancel() end
-  self.update_task = nil
   TheFrontEnd:PopScreen(self)
-  self.open = false
 end
 
 return BossCalendar

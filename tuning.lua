@@ -90,6 +90,7 @@ GLOBAL.TUNING.BCL = { -- create our mod namespace
   INFO = info,
   DROPS = drops,
   BOSS_BY_DROP = boss_by_drop,
+  VIEW_KEY = GLOBAL.rawget(GLOBAL, GetModConfigData('key_to_view')),
   FONT_SIZE = GetModConfigData('calendar_font_size'),
   CALENDAR_TIME_STYLE = GetModConfigData('calendar_time_style'),
   ANNOUNCE_TIME_STYLE = GetModConfigData('announce_time_style'),
