@@ -5,6 +5,7 @@ local Image = require('widgets/image')
 
 local Data = require('bosscalendar/persistentdata')('BossCalendarLite')
 local BossCalendar = Class(Screen)
+local S, T = STRINGS.BCL, TUNING.BCL
 local cooldown = {}
 
 -- count of seconds the world has run till now
@@ -20,20 +21,20 @@ end
 local function Remind(message, duration, color)
   if cooldown.remind then return end
   cooldown.remind = ThePlayer:DoTaskInTime(30, function() cooldown.remind = nil end)
-  color = color or PLAYERCOLOURS[TUNING.BCL.REMIND_COLOR]
-  if TUNING.BCL.REMIND_POSITION == 'chat' then
+  color = color or PLAYERCOLOURS[T.REMIND_COLOR]
+  if T.REMIND_POSITION == 'chat' then
     ChatHistory:OnAnnouncement(message, color, 'default') -- ChatHistoryManager:OnAnnouncement(message, colour, announce_type)
-  elseif TUNING.BCL.REMIND_POSITION == 'head' then
+  elseif T.REMIND_POSITION == 'head' then
     if not ThePlayer.components.talker then return end
-    ThePlayer.components.talker:Say(message, duration or TUNING.BCL.TALK_DURATION, true, true, true, color) -- Talker:Say(script, time, noanim, force, nobroadcast, colour, ...)
+    ThePlayer.components.talker:Say(message, duration or T.TALK_DURATION, true, true, true, color) -- Talker:Say(script, time, noanim, force, nobroadcast, colour, ...)
   end
 end
 
 local function RemindOfflineRespawn(bosses)
   if #bosses == 0 then return end
-  local separator = (#bosses == 2) and STRINGS.BCL.AND or STRINGS.BCL.ANDS
-  local tab = { bosses = table.concat(bosses, separator), have = #bosses == 1 and STRINGS.BCL.HAS or STRINGS.BCL.HAVE }
-  Remind(subfmt(STRINGS.BCL.ORR, tab))
+  local separator = (#bosses == 2) and S.AND or S.ANDS
+  local tab = { bosses = table.concat(bosses, separator), have = #bosses == 1 and S.HAS or S.HAVE }
+  Remind(subfmt(S.ORR, tab))
 end
 
 -- Persistant Data
@@ -52,7 +53,7 @@ function BossCalendar:Load()
 
   local respawned = {} -- bosses respawned during offline
 
-  for _, boss in ipairs(TUNING.BCL.BOSS) do
+  for _, boss in ipairs(T.BOSS) do
     if data[boss] then -- newly added boss may not be saved to persistent data
       local defeat = data[boss].defeat -- load timestamps only if not rolled back before defeat
       if defeat and defeat < Now() then self.timestamp[boss] = data[boss] end
@@ -78,7 +79,7 @@ function BossCalendar:OnTimerDone(boss)
   if not self.timestamp[boss] then return end -- unrelated timers
   self.timestamp[boss].respawn = nil
   self:Save()
-  Remind(FMT(STRINGS.BCL.OTD, boss))
+  Remind(FMT(S.OTD, boss))
 end
 
 function BossCalendar:Init()
@@ -86,14 +87,14 @@ function BossCalendar:Init()
   ThePlayer:ListenForEvent('timerdone', function(_, data) self:OnTimerDone(data.name) end)
   self.session_id = TheWorld.net.components.shardstate:GetMasterSessionId()
   self.timestamp = {} -- init timestamp table, maybe load in self:Load() later
-  for _, boss in ipairs(TUNING.BCL.BOSS) do
+  for _, boss in ipairs(T.BOSS) do
     self.timestamp[boss] = {
       defeat = nil, -- when did player defeat this boss
       respawn = nil, -- when will this boss respawn
     }
   end
-  self.CalendarTimeStyle = self[TUNING.BCL.CALENDAR_TIME_STYLE]
-  self.AnnounceTimeStyle = self[TUNING.BCL.ANNOUNCE_TIME_STYLE]
+  self.CalendarTimeStyle = self[T.CALENDAR_TIME_STYLE]
+  self.AnnounceTimeStyle = self[T.ANNOUNCE_TIME_STYLE]
   self:Load()
   self.init = true
 end
@@ -108,8 +109,8 @@ function BossCalendar:ValidateDefeatByDrop(inst)
   local e = SearchBossByDrop(inst, inst.prefab) -- entity of boss
   if not e or not e:IsValid() then return end
 
-  local boss = TUNING.BCL.BOSS_BY_DROP[inst.prefab]
-  for _, a in pairs(TUNING.BCL.INFO[boss].ANIMS) do
+  local boss = T.BOSS_BY_DROP[inst.prefab]
+  for _, a in pairs(T.INFO[boss].ANIMS) do
     if e.AnimState:IsCurrentAnimation(a) then self:OnDefeat(boss) end
   end
 end
@@ -121,11 +122,11 @@ function BossCalendar:CheckDaywalkerAround()
   local dd = self.is_daywalker2 and 'daywalker' or 'daywalker2' -- Daywalker Defeated this time
   for _, entity in ipairs(entities) do
     if entity.prefab == dd then
-      local message = subfmt(STRINGS.BCL.CDA, { boss = STRINGS.NAMES[dd:upper()] })
-      local interval = TUNING.BCL.INFO[dd].RESPAWN_INTERVAL + TUNING.TOTAL_DAY_TIME -- add a whole day
+      local message = subfmt(S.CDA, { boss = STRINGS.NAMES[dd:upper()] })
+      local interval = T.INFO[dd].RESPAWN_INTERVAL + TUNING.TOTAL_DAY_TIME -- add a whole day
       ThePlayer.components.timer:SetTimeLeft('daywalker', interval) -- reset timer
       self.timestamp['daywalker'].respawn = Now() + interval -- reset repsawn timestamp
-      Remind(message, TUNING.MAX_TALKER_DURATION, TUNING.BCL.INFO[dd].COLOR)
+      Remind(message, TUNING.MAX_TALKER_DURATION, T.INFO[dd].COLOR)
       self:Save()
       break
     end
@@ -136,7 +137,7 @@ function BossCalendar:OnDefeat(boss)
   if not self.init then return end
   if self.timestamp[boss:gsub('%d', '')].respawn then return end -- remove 2 from daywalker2
 
-  local interval = TUNING.BCL.INFO[boss].RESPAWN_INTERVAL
+  local interval = T.INFO[boss].RESPAWN_INTERVAL
 
   if boss:find('daywalker') then -- daywalker or daywalker2
     -- Nightmare Werepig is defeated in cave this time, next time it will be in big junk pile on forest.
@@ -163,14 +164,14 @@ end
 
 function BossCalendar:AbsoluteGameDay(boss, announce)
   local day = string.format('%.2f', 1 + (self.timestamp[boss].respawn / TUNING.TOTAL_DAY_TIME))
-  return announce and FMT(STRINGS.BCL.AGD_LONG, boss, day) or FMT(STRINGS.BCL.AGD_SHORT, nil, day)
+  return announce and FMT(S.AGD_LONG, boss, day) or FMT(S.AGD_SHORT, nil, day)
 end
 
 function BossCalendar:CountdownGameDays(boss, announce)
   local delta = math.max(0, self.timestamp[boss].respawn - Now())
   local days = string.format('%.2f', delta / TUNING.TOTAL_DAY_TIME)
-  days = days .. (tonumber(days) <= 1 and STRINGS.BCL.DAY or STRINGS.BCL.DAYS)
-  return announce and FMT(STRINGS.BCL.CGD, boss, days) or days
+  days = days .. (tonumber(days) <= 1 and S.DAY or S.DAYS)
+  return announce and FMT(S.CGD, boss, days) or days
 end
 
 function BossCalendar:CountdownRealTime(boss, announce)
@@ -180,27 +181,27 @@ function BossCalendar:CountdownRealTime(boss, announce)
   local s = math.floor(delta % 60)
   if not announce then return string.format('%02d:%02d:%02d', h, m, s) end
   local time = {}
-  if h > 0 then table.insert(time, h .. (h == 1 and STRINGS.BCL.HOUR or STRINGS.BCL.HOURS)) end
-  if m > 0 then table.insert(time, m .. (m == 1 and STRINGS.BCL.MINUTE or STRINGS.BCL.MINUTES)) end
-  if s > 0 then table.insert(time, s .. (s == 1 and STRINGS.BCL.SECOND or STRINGS.BCL.SECONDS)) end
-  return FMT(STRINGS.BCL.CRT, boss, table.concat(time, ' '))
+  if h > 0 then table.insert(time, h .. (h == 1 and S.HOUR or S.HOURS)) end
+  if m > 0 then table.insert(time, m .. (m == 1 and S.MINUTE or S.MINUTES)) end
+  if s > 0 then table.insert(time, s .. (s == 1 and S.SECOND or S.SECONDS)) end
+  return FMT(S.CRT, boss, table.concat(time, ' '))
 end
 
 function BossCalendar:OnClick(boss)
   if cooldown.announce then return end
   cooldown.announce = ThePlayer:DoTaskInTime(5, function() cooldown.announce = nil end)
-  local message = self.timestamp[boss].respawn and self:AnnounceTimeStyle(boss, true) or FMT(STRINGS.BCL.OC, boss)
+  local message = self.timestamp[boss].respawn and self:AnnounceTimeStyle(boss, true) or FMT(S.OC, boss)
   TheNet:Say(STRINGS.LMB .. ' ' .. message)
 end
 
 function BossCalendar:Update()
-  for _, boss in ipairs(TUNING.BCL.BOSS) do
+  for _, boss in ipairs(T.BOSS) do
     local txt, img = 'text_' .. boss, 'image_' .. boss
     if self.timestamp[boss].respawn then -- display respawn time information
       self[img]:SetTint(unpack(DARKGREY)) -- darken image
       self[txt]:SetString(self:CalendarTimeStyle(boss))
       if self.is_daywalker2 then boss = boss:gsub('daywalker', 'daywalker2') end
-      self[txt]:SetColour(TUNING.BCL.INFO[boss].COLOR)
+      self[txt]:SetColour(T.INFO[boss].COLOR)
     else -- display boss name
       self[img]:SetTint(unpack(WHITE))
       self[txt]:SetColour(WHITE)
@@ -227,12 +228,12 @@ function BossCalendar:Show() -- DoInit(), screens/playerstatusscreen.lua
   self.title = self.root:AddChild(Text(TITLEFONT, 48))
   self.title:SetColour(WHITE)
   self.title:SetPosition(0, 150)
-  self.title:SetString(STRINGS.BCL.TITLE)
+  self.title:SetString(S.TITLE)
 
-  for i, boss in ipairs(TUNING.BCL.BOSS) do
+  for i, boss in ipairs(T.BOSS) do
     local x, y = (i - 1) % 5 * 120 - 240, -130 * math.floor((i - 1) / 5)
     local txt, img = 'text_' .. boss, 'image_' .. boss
-    self[txt] = self.root:AddChild(Text(UIFONT, TUNING.BCL.FONT_SIZE))
+    self[txt] = self.root:AddChild(Text(UIFONT, T.FONT_SIZE))
     self[txt]:SetPosition(x, y + 80)
     self[img] = self.root:AddChild(Image('images/boss.xml', boss .. '.tex'))
     self[img]:SetSize(100, 100)

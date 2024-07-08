@@ -1,13 +1,12 @@
 local G = GLOBAL
 if G.GetGameModeProperty('level_type') ~= G.LEVELTYPE.SURVIVAL then return end
-local BossCalendar = require('screens/bosscalendar')
 Assets = { Asset('ATLAS', 'images/boss.xml') }
-
 modimport('languages/en') -- load translation strings with English fallback
 local lang = 'languages/' .. G.LOC.GetLocaleCode()
 if G.kleifileexists(MODROOT .. lang .. '.lua') then modimport(lang) end
 modimport('keybind') -- refine key binding UI
 modimport('tuning') -- load constants and options
+local BossCalendar = require('screens/bosscalendar')
 
 AddPlayerPostInit(function(inst) -- initialize after player
   inst:DoTaskInTime(0, function() BossCalendar:Init() end)
