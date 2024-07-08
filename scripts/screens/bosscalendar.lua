@@ -196,16 +196,16 @@ end
 
 function BossCalendar:Update()
   for _, boss in ipairs(T.BOSS) do
-    local txt, img = 'text_' .. boss, 'image_' .. boss
+    local img, txt = self[boss], self[boss].text
     if self.timestamp[boss].respawn then -- display respawn time information
-      self[img]:SetTint(unpack(DARKGREY)) -- darken image
-      self[txt]:SetString(self:CalendarTimeStyle(boss))
+      img:SetTint(unpack(DARKGREY)) -- darken image
+      txt:SetString(self:CalendarTimeStyle(boss))
       if self.is_daywalker2 then boss = boss:gsub('daywalker', 'daywalker2') end
-      self[txt]:SetColour(T.INFO[boss].COLOR)
-    else -- display boss name
-      self[img]:SetTint(unpack(WHITE))
-      self[txt]:SetColour(WHITE)
-      self[txt]:SetString(self:Name(boss))
+      txt:SetColour(T.INFO[boss].COLOR)
+      txt:Show()
+    else
+      img:SetTint(unpack(WHITE)) -- lighten image
+      txt:Hide()
     end
   end
 end
@@ -226,19 +226,15 @@ function BossCalendar:Show() -- DoInit(), screens/playerstatusscreen.lua
 
   if self.title then self.title:Kill() end
   self.title = self.root:AddChild(Text(TITLEFONT, 48))
-  self.title:SetColour(WHITE)
   self.title:SetPosition(0, 150)
   self.title:SetString(S.TITLE)
 
   for i, boss in ipairs(T.BOSS) do
-    local x, y = (i - 1) % 5 * 120 - 240, -130 * math.floor((i - 1) / 5)
-    local txt, img = 'text_' .. boss, 'image_' .. boss
-    self[txt] = self.root:AddChild(Text(UIFONT, T.FONT_SIZE))
-    self[txt]:SetPosition(x, y + 80)
-    self[img] = self.root:AddChild(Image('images/boss.xml', boss .. '.tex'))
-    self[img]:SetSize(100, 100)
-    self[img]:SetPosition(x, y + 20)
-    self[img].OnMouseButton = function(_, button, down)
+    self[boss] = self.root:AddChild(Image('images/boss.xml', boss .. '.tex'))
+    self[boss].text = self[boss]:AddChild(Text(UIFONT, T.FONT_SIZE))
+    self[boss]:SetSize(120, 120)
+    self[boss]:SetPosition(120 * ((i - 1) % 5 - 2), 60 - 160 * math.floor((i - 1) / 5))
+    self[boss].OnMouseButton = function(_, button, down)
       if button == MOUSEBUTTON_LEFT and down then self:OnClick(boss) end
     end
   end
