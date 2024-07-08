@@ -27,7 +27,12 @@ end
 AddPrefabPostInit('klaus_sack', function(inst) -- Loot Stash
   inst:ListenForEvent('onremove', function(inst)
     if not G.IsSpecialEventActive('winters_feast') then return end -- Winter's Feast
-    if not G.FindEntity(inst, 4, nil, { 'bundle' }) then return end -- Gift or Bundled Supplies
-    BossCalendar:OnDefeat('klaus_sack')
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local entities = G.TheSim:FindEntities(x, y, z, 4, { 'bundle' }) -- Gift or Bundled Supplies
+    local gift_count = 0
+    for _, v in ipairs(entities) do
+      if v.prefab == 'gift' then gift_count = gift_count + 1 end
+    end
+    if gift_count >= 6 then BossCalendar:OnDefeat('klaus_sack') end
   end)
 end) -- credit: Huxi, 3161117403/modtable/61.lua: InitPrefab("klaus_sack", ...)
