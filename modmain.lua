@@ -7,19 +7,16 @@ if G.kleifileexists(MODROOT .. lang .. '.lua') then modimport(lang) end
 modimport('keybind') -- refine key binding UI
 modimport('tuning') -- load constants and options
 local BossCalendar = require('screens/bosscalendar')
+local T = TUNING.BOSS_CALENDAR
 
 AddPlayerPostInit(function(inst) -- initialize after player
   inst:DoTaskInTime(0, function() BossCalendar:Init() end)
 end)
 
-G.TheInput:AddKeyDownHandler(TUNING.BCL.VIEW_KEY, function() -- add view calendar keybind
-  if TheFrontEnd:GetActiveScreen().name == 'HUD' then BossCalendar:Show() end
-end)
-G.TheInput:AddKeyUpHandler(TUNING.BCL.VIEW_KEY, function()
-  if TheFrontEnd:GetActiveScreen().name == 'Boss Calendar' then BossCalendar:Hide() end
-end)
+G.TheInput:AddKeyDownHandler(T.VIEW_KEY, function() BossCalendar:Show() end) -- bind key
+G.TheInput:AddKeyUpHandler(T.VIEW_KEY, function() BossCalendar:Hide() end)
 
-for _, drop in pairs(TUNING.BCL.DROPS) do -- validate defeat of boss after loot drop
+for _, drop in ipairs(T.DROPS) do -- validate defeat of boss after loot drop
   AddPrefabPostInit(drop, function(inst)
     inst:DoTaskInTime(0, function()
       if inst.entity and not inst.entity:GetParent() then BossCalendar:ValidateDefeatByDrop(inst) end

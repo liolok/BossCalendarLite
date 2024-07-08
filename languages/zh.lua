@@ -1,5 +1,5 @@
-GLOBAL.STRINGS.BCL = {
-  -- Open()
+GLOBAL.STRINGS.BOSS_CALENDAR = {
+  -- Show()
   TITLE = 'Boss 日历',
 
   -- OfflineRespawnRemind()

@@ -85,7 +85,7 @@ for boss, i in pairs(info) do
   end
 end
 
-GLOBAL.TUNING.BCL = { -- create our mod namespace
+GLOBAL.TUNING.BOSS_CALENDAR = { -- create our mod namespace
   BOSS = BOSS,
   INFO = info,
   DROPS = drops,

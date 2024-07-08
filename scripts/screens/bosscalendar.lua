@@ -5,7 +5,7 @@ local Image = require('widgets/image')
 
 local Data = require('bosscalendar/persistentdata')('BossCalendarLite')
 local BossCalendar = Class(Screen)
-local S, T = STRINGS.BCL, TUNING.BCL
+local S, T = STRINGS.BOSS_CALENDAR, TUNING.BOSS_CALENDAR
 local cooldown = {}
 
 -- count of seconds the world has run till now
@@ -211,7 +211,7 @@ function BossCalendar:Update()
 end
 
 function BossCalendar:Show() -- DoInit(), screens/playerstatusscreen.lua
-  if not self.init then return end
+  if not (self.init and TheFrontEnd:GetActiveScreen().name == 'HUD') then return end
   Screen._ctor(self, 'Boss Calendar')
 
   if self.root then self.root:Kill() end
@@ -245,6 +245,7 @@ function BossCalendar:Show() -- DoInit(), screens/playerstatusscreen.lua
 end
 
 function BossCalendar:Hide()
+  if TheFrontEnd:GetActiveScreen().name ~= 'Boss Calendar' then return end
   if self.update_task then self.update_task:Cancel() end
   TheFrontEnd:PopScreen(self)
 end
