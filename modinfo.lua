@@ -199,7 +199,7 @@ configuration_options = {
       { data = 30, description = '30' },
       { data = 32, description = '32', hover = T(S.FONT_SIZE.BIG) },
     },
-    default = 24,
+    default = 28,
     name = 'calendar_font_size',
   },
 
