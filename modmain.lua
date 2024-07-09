@@ -24,13 +24,9 @@ for _, drop in ipairs(T.DROPS) do -- validate defeat of boss after loot drop
   end)
 end
 
-AddPrefabPostInit('klaus_sack', function(inst) -- Loot Stash
+AddPrefabPostInit('klaus_sack', function(inst) -- Loot Stash opened during Winter's Feast
   inst:ListenForEvent('onremove', function(inst)
-    if
-      G.IsSpecialEventActive(G.SPECIAL_EVENTS.WINTERS_FEAST) -- Winter's Feast
-      and G.ThePlayer:IsNear(inst, 40) -- player around
-      and G.FindEntity(inst, 4, nil, { 'bundle' }) -- Gift or Bundled Supplies close by
-    then
+    if G.IsSpecialEventActive('winters_feast') and inst.AnimState:IsCurrentAnimation('open') then
       BossCalendar:OnDefeat('klaus_sack')
     end
   end)
