@@ -137,16 +137,20 @@ function BossCalendar:OnDefeat(boss)
   if not self.init then return end
   if self.timestamp[boss:gsub('%d', '')].respawn then return end -- remove 2 from daywalker2
 
-  local interval = T.INFO[boss].RESPAWN_INTERVAL
+  local interval = 0 -- how many seconds will it take to respawn this boss
+  for _, respawn_time in ipairs(T.INFO[boss].KEYS) do
+    interval = interval + TUNING[respawn_time]
+  end
 
   if boss:find('daywalker') then -- daywalker or daywalker2
     -- Nightmare Werepig is defeated in cave this time, next time it will be in big junk pile on forest.
     self.is_daywalker2 = boss == 'daywalker'
     boss = 'daywalker' -- regard two variants as one same boss
-    local time_left_today = (1 - TheWorld.state.time) * TUNING.TOTAL_DAY_TIME
-    interval = interval + time_left_today -- add remaining time of the day
-    -- If it's still around player when next day coming, respawn will be delayed.
-    ThePlayer:DoTaskInTime(time_left_today, function() self:CheckDaywalkerAround() end)
+    local seconds_left_today = (1 - TheWorld.state.time) * TUNING.TOTAL_DAY_TIME
+    -- Multiply seconds of a day, then add remaining time of the day.
+    interval = interval * TUNING.TOTAL_DAY_TIME + seconds_left_today
+    -- If it's still around player when next day coming, respawn will be delayed another whole day.
+    ThePlayer:DoTaskInTime(seconds_left_today, function() self:CheckDaywalkerAround() end)
   end
 
   ThePlayer.components.timer:StartTimer(boss, interval)
