@@ -8,8 +8,7 @@ local BossCalendar = Class(Screen)
 local S, T = STRINGS.BOSS_CALENDAR, TUNING.BOSS_CALENDAR
 local cooldown = {}
 
--- count of seconds the world has run till now
-local function Now() return (TheWorld.state.cycles + TheWorld.state.time) * TUNING.TOTAL_DAY_TIME end
+local function Now() return (TheWorld.state.cycles + TheWorld.state.time) * TUNING.TOTAL_DAY_TIME end -- count of seconds the world has run till now
 
 local function FMT(s, boss, time)
   local tab = {}
@@ -145,7 +144,7 @@ function BossCalendar:OnDefeat(boss)
     local seconds_left_today = (1 - TheWorld.state.time) * TUNING.TOTAL_DAY_TIME
     interval = interval * TUNING.TOTAL_DAY_TIME + seconds_left_today -- multiply seconds of a day, then add remaining time of the day.
     ThePlayer:DoTaskInTime(seconds_left_today, function() self:CheckDaywalkerAround(boss) end) -- still around player when next day coming?
-    self.is_daywalker2 = boss == 'daywalker'-- Nightmare Werepig is defeated in cave this time, next time it will be in big junk pile on forest.
+    self.is_daywalker2 = boss == 'daywalker' -- Nightmare Werepig is defeated in cave this time, next time it will be in big junk pile on forest.
     boss = 'daywalker' -- regard two variants as one same boss
   end
 
