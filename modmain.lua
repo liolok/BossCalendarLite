@@ -16,11 +16,9 @@ end)
 G.TheInput:AddKeyDownHandler(T.VIEW_KEY, function() BossCalendar:Show() end) -- bind key
 G.TheInput:AddKeyUpHandler(T.VIEW_KEY, function() BossCalendar:Hide() end)
 
-for _, drop in ipairs(T.DROPS) do -- validate defeat of boss after loot drop
-  AddPrefabPostInit(drop, function(inst)
-    inst:DoTaskInTime(0, function()
-      if inst.entity and not inst.entity:GetParent() then BossCalendar:ValidateDefeatByDrop(inst) end
-    end)
+for _, prefab in ipairs(T.DROPS) do -- validate defeat of boss after loot drop
+  AddPrefabPostInit(prefab, function(inst)
+    if inst.entity and not inst.entity:GetParent() then BossCalendar:ValidateDefeat(T.BOSS_BY_DROP[prefab]) end
   end)
 end
 

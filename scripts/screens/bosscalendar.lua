@@ -98,37 +98,31 @@ function BossCalendar:Init()
   self.init = true
 end
 
-local function SearchBossByDrop(inst, drop)
-  if not ThePlayer or cooldown[drop] then return nil end
-  cooldown[drop] = ThePlayer:DoTaskInTime(3, function() cooldown[drop] = nil end)
-  return FindEntity(inst, 15, nil, { 'epic' })
+local function FindEntity(boss)
+  local x, y, z = ThePlayer.Transform:GetWorldPosition()
+  for _, entity in ipairs(TheSim:FindEntities(x, y, z, 80, { 'epic' }) or {}) do
+    if entity.prefab == boss then return entity end
+  end
+  return nil
 end
 
-function BossCalendar:ValidateDefeatByDrop(inst)
-  local e = SearchBossByDrop(inst, inst.prefab) -- entity of boss
-  if not e or not e:IsValid() then return end
-
-  local boss = T.BOSS_BY_DROP[inst.prefab]
-  for _, a in pairs(T.INFO[boss].ANIMS) do
-    if e.AnimState:IsCurrentAnimation(a) then self:OnDefeat(boss) end
+function BossCalendar:ValidateDefeat(boss)
+  if cooldown[boss] or not ThePlayer then return end
+  cooldown[boss] = ThePlayer:DoTaskInTime(3, function() cooldown[boss] = nil end)
+  local entity = FindEntity(boss)
+  if not entity then return end
+  for _, anim in ipairs(T.INFO[boss].ANIMS) do
+    if entity.AnimState:IsCurrentAnimation(anim) then self:OnDefeat(boss) end
   end
 end
 
 function BossCalendar:CheckDaywalkerAround(defeated)
-  local x, y, z = ThePlayer.Transform:GetWorldPosition()
-  local entities = TheSim:FindEntities(x, y, z, 80, { 'epic' })
-  for _, entity in ipairs(entities or {}) do
-    if entity.prefab == defeated then -- daywalker or daywalker2
-      local timer = ThePlayer.components.timer
-      local interval = timer:GetTimeLeft('daywalker') + TUNING.TOTAL_DAY_TIME -- add a whole day
-      timer:SetTimeLeft('daywalker', interval) -- reset timer
-      self.timestamp.daywalker.respawn = Now() + interval -- reset repsawn timestamp
-      self:Save()
-      local message = subfmt(S.CDA, { boss = STRINGS.NAMES[defeated:upper()] })
-      Remind(message, TUNING.MAX_TALKER_DURATION, T.INFO[defeated].COLOR)
-      break
-    end
-  end
+  if not FindEntity(defeated) then return end
+  Remind(subfmt(S.CDA, { boss = STRINGS.NAMES[defeated:upper()] }), TUNING.MAX_TALKER_DURATION, T.INFO[defeated].COLOR)
+  local interval = ThePlayer.components.timer:GetTimeLeft('daywalker') + TUNING.TOTAL_DAY_TIME -- add a whole day
+  ThePlayer.components.timer:SetTimeLeft('daywalker', interval) -- reset timer
+  self.timestamp.daywalker.respawn = Now() + interval -- reset repsawn timestamp
+  self:Save()
 end
 
 function BossCalendar:OnDefeat(boss)
