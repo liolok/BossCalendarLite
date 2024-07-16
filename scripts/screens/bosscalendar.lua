@@ -2,13 +2,17 @@ local Screen = require('widgets/screen')
 local Widget = require('widgets/widget')
 local Text = require('widgets/text')
 local Image = require('widgets/image')
-
-local Data = require('bosscalendar/persistentdata')('BossCalendarLite')
 local BossCalendar = Class(Screen)
-local S, T = STRINGS.BOSS_CALENDAR, TUNING.BOSS_CALENDAR
-local cooldown = {}
+local Data = require('bosscalendar/persistentdata')('BossCalendarLite')
+local S, T, cooldown = STRINGS.BOSS_CALENDAR, TUNING.BOSS_CALENDAR, {}
 
-local function Now() return (TheWorld.state.cycles + TheWorld.state.time) * TUNING.TOTAL_DAY_TIME end -- count of seconds the world has run till now
+local function FindEntity(boss)
+  local x, y, z = ThePlayer.Transform:GetWorldPosition()
+  for _, entity in ipairs(TheSim:FindEntities(x, y, z, 80, { 'epic' }) or {}) do
+    if entity.prefab == boss then return entity end
+  end
+  return nil
+end
 
 local function FMT(s, boss, time)
   local tab = {}
@@ -16,6 +20,8 @@ local function FMT(s, boss, time)
   if time then tab.time = time end
   return subfmt(s, tab)
 end
+
+local function Now() return (TheWorld.state.cycles + TheWorld.state.time) * TUNING.TOTAL_DAY_TIME end -- count of seconds the world has run till now
 
 local function Remind(message, duration, color)
   if cooldown.remind then return end
@@ -30,13 +36,11 @@ local function Remind(message, duration, color)
 end
 
 local function RemindOfflineRespawn(bosses)
-  if #bosses == 0 then return end
-  local separator = (#bosses == 2) and S.AND or S.ANDS
-  local tab = { bosses = table.concat(bosses, separator), have = #bosses == 1 and S.HAS or S.HAVE }
-  Remind(subfmt(S.ORR, tab))
+  local separator = #bosses == 2 and S.AND or S.ANDS
+  Remind(subfmt(S.ROR, { bosses = table.concat(bosses, separator), have = #bosses == 1 and S.HAS or S.HAVE }))
 end
 
--- Persistant Data
+-- Persistant Data -------------------------------------------------------------
 
 function BossCalendar:Save()
   Data:SetValue(self.session_id .. '_timestamp', self.timestamp)
@@ -51,7 +55,6 @@ function BossCalendar:Load()
   if not data then return end
 
   local respawned = {} -- bosses respawned during offline
-
   for _, boss in ipairs(T.BOSS) do
     if data[boss] then -- newly added boss may not be saved to persistent data
       local defeat = data[boss].defeat -- load timestamps only if not rolled back before defeat
@@ -67,12 +70,12 @@ function BossCalendar:Load()
       end
     end
   end
+  if #respawned > 0 then ThePlayer:DoTaskInTime(10, function() RemindOfflineRespawn(respawned) end) end
 
   self:Save()
-  ThePlayer:DoTaskInTime(10, function() RemindOfflineRespawn(respawned) end)
 end
 
--- General
+-- General ---------------------------------------------------------------------
 
 function BossCalendar:OnTimerDone(boss)
   if not self.timestamp[boss] then return end -- unrelated timers
@@ -96,14 +99,6 @@ function BossCalendar:Init()
   self.AnnounceTimeStyle = self[T.ANNOUNCE_TIME_STYLE]
   self:Load()
   self.init = true
-end
-
-local function FindEntity(boss)
-  local x, y, z = ThePlayer.Transform:GetWorldPosition()
-  for _, entity in ipairs(TheSim:FindEntities(x, y, z, 80, { 'epic' }) or {}) do
-    if entity.prefab == boss then return entity end
-  end
-  return nil
 end
 
 function BossCalendar:ValidateDefeat(boss)
@@ -148,7 +143,7 @@ function BossCalendar:OnDefeat(boss)
   self:Save()
 end
 
--- GUI
+-- GUI -------------------------------------------------------------------------
 
 function BossCalendar:Name(boss)
   if self.is_daywalker2 then boss = boss:gsub('daywalker$', 'daywalker2') end

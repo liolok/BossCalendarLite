@@ -2,12 +2,12 @@ GLOBAL.STRINGS.BOSS_CALENDAR = {
   -- Show()
   TITLE = 'Boss 日曆',
 
-  -- OfflineRespawnRemind()
+  -- RemindOfflineRespawn()
   AND = '和',
   ANDS = '、',
   HAS = '已',
   HAVE = '均已',
-  ORR = '{bosses}{have}在離線期間刷新。',
+  ROR = '{bosses}{have}在離線期間刷新。',
 
   -- OnTimerDone()
   OTD = '{boss}剛剛刷新。',

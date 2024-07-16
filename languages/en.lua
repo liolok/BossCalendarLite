@@ -2,12 +2,12 @@ GLOBAL.STRINGS.BOSS_CALENDAR = {
   -- Show()
   TITLE = 'Boss Calendar',
 
-  -- OfflineRespawnRemind()
+  -- RemindOfflineRespawn()
   AND = ' and ',
   ANDS = ', ',
   HAS = ' has',
   HAVE = ' have',
-  ORR = '{bosses} {have} already respawned during offline.',
+  ROR = '{bosses} {have} already respawned during offline.',
 
   -- OnTimerDone()
   OTD = '{boss} has just respawned.',
