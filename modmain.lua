@@ -32,7 +32,7 @@ for prefab, boss in pairs(T.BY_PREFAB) do
     inst:ListenForEvent('onremove', function(inst)
       if prefab == 'klaus_sack' and not G.IsSpecialEventActive('winters_feast') then return end
       if not ValidateAnimation(inst.AnimState, T.ANIM[boss]) then return end
-      if prefab:find('twinofterror') and not G.FindEntity(inst, 4, nil, SHIELD_TAG) then return end
+      if prefab:find('twinofterror') and not G.FindEntity(inst, 10, nil, SHIELD_TAG) then return end
       BossCalendar:OnDefeat(boss)
     end)
   end)
