@@ -16,16 +16,24 @@ end)
 G.TheInput:AddKeyDownHandler(T.VIEW_KEY, function() BossCalendar:Show() end) -- bind key
 G.TheInput:AddKeyUpHandler(T.VIEW_KEY, function() BossCalendar:Hide() end)
 
-for _, prefab in ipairs(T.DROPS) do -- validate defeat of boss after loot drop
+for prefab, boss in pairs(T.BY_DROP) do -- validate defeat of boss after loot drop
   AddPrefabPostInit(prefab, function(inst)
-    if inst.entity and not inst.entity:GetParent() then BossCalendar:ValidateDefeat(T.BOSS_BY_DROP[prefab]) end
+    if inst.entity and not inst.entity:GetParent() then BossCalendar:ValidateDefeat(boss) end
   end)
 end
 
-AddPrefabPostInit('klaus_sack', function(inst) -- Loot Stash opened during Winter's Feast
-  inst:ListenForEvent('onremove', function(inst)
-    if G.IsSpecialEventActive('winters_feast') and inst.AnimState:IsCurrentAnimation('open') then
-      BossCalendar:OnDefeat('klaus_sack')
-    end
+local function ValidateAnimation(as, anim)
+  if as:IsCurrentAnimation('death') then return true end
+  return anim and as:IsCurrentAnimation(anim) or false
+end
+local SHIELD_TAG = { 'handfed', 'fedbyall', 'toolpunch', 'eatsrawmeat', 'strongstomach', 'weapon', 'shadowlevel' }
+for prefab, boss in pairs(T.BY_PREFAB) do
+  AddPrefabPostInit(prefab, function(inst)
+    inst:ListenForEvent('onremove', function(inst)
+      if prefab == 'klaus_sack' and not G.IsSpecialEventActive('winters_feast') then return end
+      if not ValidateAnimation(inst.AnimState, T.ANIM[boss]) then return end
+      if prefab:find('twinofterror') and not G.FindEntity(inst, 4, nil, SHIELD_TAG) then return end
+      BossCalendar:OnDefeat(boss)
+    end)
   end)
-end) -- credit: Huxi, 3161117403/modtable/61.lua: InitPrefab("klaus_sack", ...)
+end

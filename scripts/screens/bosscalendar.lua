@@ -105,15 +105,14 @@ function BossCalendar:ValidateDefeat(boss)
   if cooldown[boss] or not ThePlayer then return end
   cooldown[boss] = ThePlayer:DoTaskInTime(3, function() cooldown[boss] = nil end)
   local entity = FindEntity(boss)
-  if not entity then return end
-  for _, anim in ipairs(T.INFO[boss].ANIMS) do
-    if entity.AnimState:IsCurrentAnimation(anim) then self:OnDefeat(boss) end
-  end
+  if entity and entity.AnimState:IsCurrentAnimation(T.ANIM[boss]) then self:OnDefeat(boss) end
 end
 
-function BossCalendar:CheckDaywalkerAround(defeated)
+function BossCalendar:CheckDaywalkerAround()
+  local defeated = self.is_daywalker2 and 'daywalker' or 'daywalker2'
   if not FindEntity(defeated) then return end
-  Remind(subfmt(S.CDA, { boss = STRINGS.NAMES[defeated:upper()] }), TUNING.MAX_TALKER_DURATION, T.INFO[defeated].COLOR)
+  local message = subfmt(S.CDA, { boss = STRINGS.NAMES[defeated:upper()] })
+  Remind(message, TUNING.MAX_TALKER_DURATION, WEBCOLOURS[self.is_daywalker2 and 'RED' or 'ORANGE'])
   local interval = ThePlayer.components.timer:GetTimeLeft('daywalker') + TUNING.TOTAL_DAY_TIME -- add a whole day
   ThePlayer.components.timer:SetTimeLeft('daywalker', interval) -- reset timer
   self.timestamp.daywalker.respawn = Now() + interval -- reset repsawn timestamp
@@ -122,17 +121,16 @@ end
 
 function BossCalendar:OnDefeat(boss)
   if not self.init then return end
-  if self.timestamp[boss:gsub('%d', '')].respawn then return end -- remove 2 from daywalker2
 
   local interval = 0 -- how many seconds will it take to respawn this boss
-  for _, respawn_time in ipairs(T.INFO[boss].KEYS) do
+  for _, respawn_time in ipairs(T.RESPAWN_TIME[boss]) do
     interval = interval + TUNING[respawn_time]
   end
 
   if boss:find('daywalker') then -- daywalker or daywalker2
     local seconds_left_today = (1 - TheWorld.state.time) * TUNING.TOTAL_DAY_TIME
-    interval = interval * TUNING.TOTAL_DAY_TIME + seconds_left_today -- multiply seconds of a day, then add remaining time of the day.
-    ThePlayer:DoTaskInTime(seconds_left_today, function() self:CheckDaywalkerAround(boss) end) -- still around player when next day coming?
+    interval = interval * TUNING.TOTAL_DAY_TIME + seconds_left_today -- multiply seconds of a day, add remaining time of the day.
+    ThePlayer:DoTaskInTime(seconds_left_today, function() self:CheckDaywalkerAround() end) -- still around player when next day coming?
     self.is_daywalker2 = boss == 'daywalker' -- Nightmare Werepig is defeated in cave this time, next time it will be in big junk pile on forest.
     boss = 'daywalker' -- regard two variants as one same boss
   end
@@ -188,8 +186,7 @@ function BossCalendar:Update()
     if self.timestamp[boss].respawn then -- display respawn time information
       img:SetTint(unpack(DARKGREY)) -- darken image
       txt:SetString(self:CalendarTimeStyle(boss))
-      if self.is_daywalker2 then boss = boss:gsub('daywalker', 'daywalker2') end
-      txt:SetColour(T.INFO[boss].COLOR)
+      txt:SetColour(WEBCOLOURS[(boss == 'daywalker' and self.is_daywalker2) and 'ORANGE' or 'RED'])
       txt:Show()
     else
       img:SetTint(unpack(WHITE)) -- lighten image
