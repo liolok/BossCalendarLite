@@ -42,7 +42,7 @@ local PREFAB = {
 
 local DROP = {
   horrorfuel = 'daywalker',
-  scrap_monoclehat2 = 'daywalker',
+  scrap_monoclehat2 = 'daywalker2',
   bootleg = 'sharkboi',
 }
 
