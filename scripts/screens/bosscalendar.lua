@@ -197,6 +197,7 @@ end
 
 function BossCalendar:Show() -- DoInit(), screens/playerstatusscreen.lua
   if not (self.init and TheFrontEnd:GetActiveScreen().name == 'HUD') then return end
+  if ThePlayer.HUD:HasInputFocus() then return end
   Screen._ctor(self, 'Boss Calendar')
 
   if self.root then self.root:Kill() end
