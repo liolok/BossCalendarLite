@@ -13,8 +13,14 @@ AddPlayerPostInit(function(inst) -- initialize after player
   inst:DoTaskInTime(0, function() BossCalendar:Init() end)
 end)
 
-G.TheInput:AddKeyDownHandler(T.VIEW_KEY, function() BossCalendar:Show() end) -- bind key
-G.TheInput:AddKeyUpHandler(T.VIEW_KEY, function() BossCalendar:Hide() end)
+local handler = {} -- bind key
+function KeyBind(_, key)
+  if handler.down then handler.down:Remove() end
+  if handler.up then handler.up:Remove() end
+  if not key then return end
+  handler.down = G.TheInput:AddKeyDownHandler(key, function() BossCalendar:Show() end)
+  handler.up = G.TheInput:AddKeyUpHandler(key, function() BossCalendar:Hide() end)
+end
 
 for prefab, boss in pairs(T.BY_DROP) do -- validate defeat of boss after loot drop
   AddPrefabPostInit(prefab, function(inst)
