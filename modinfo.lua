@@ -13,9 +13,13 @@ local S = {
     zht = 'Boas、xaT2x、iaman2b & 李皓奇',
   },
   DESCRIPTION = {
-    'Calculate and remember when bosses respawn, with click-announcing and auto-reminding.',
-    zh = '帮你计算并记住 Boss 们什么时候刷新，支持点击宣告、自动提醒。',
-    zht = '幫你計算並記住 Boss 們何時刷新，支援點擊宣告、自動提醒。',
+    'Calculate and remember when bosses respawn.\n'
+      .. 'Support click-announcing and auto-reminding.\n'
+      .. 'Also support binding key at bottom of Settings > Controls page.',
+    zh = '帮你计算并记住 Boss 们什么时候刷新。\n支持点击宣告、自动提醒。\n'
+      .. '也支持在设置 > 控制页面底部实时调整键位绑定。',
+    zht = '幫你計算並記住 Boss 們何時刷新。\n支援點擊宣告、自動提醒。\n'
+      .. '也支援在設定 > 控制頁面底部即時調整鍵位綁定。',
   },
   VIEW_KEY = {
     'View Key',

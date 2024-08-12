@@ -1,6 +1,6 @@
-帮你计算并记住 Boss 们什么时候刷新，支持点击宣告、自动提醒。
+帮你计算并记住 Boss 们什么时候刷新。支持点击宣告、自动提醒。
 
-默认绑定 V 键，按住查看日历。
+默认绑定 V 键，按住查看日历。（支持在设置 > 控制页面底部实时调整键位绑定）
 
 [h2]已知问题[/h2]
 受客户端模组所限，只有你在场才能检测到 Boss 被击败。
@@ -28,7 +28,7 @@
 [*]Boas：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]原作者[/url]
 [*]xaT2x：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]第二任维护者[/url]
 [*]iaman2b：贴图素材高清重制、测试
-[*]呼吸：打开赃物袋的检测逻辑
+[*]呼吸：赃物袋打开检测、Boss 死亡检测
 [/list]
 
 [hr][/hr]

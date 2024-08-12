@@ -1,6 +1,6 @@
-幫你計算並記住 Boss 們何時刷新，支援點擊宣告、自動提醒。
+幫你計算並記住 Boss 們何時刷新。支援點擊宣告、自動提醒。
 
-預設綁定 V 鍵，按住查看日曆。
+預設綁定 V 鍵，按住查看日曆。（支援在設定 > 控制頁面底部即時調整鍵位綁定）
 
 [h2]已知問題[/h2]
 受客戶端模組所限，只有你在場才能偵測到 Boss 被擊敗。
@@ -28,7 +28,7 @@
 [*]Boas：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1964575060]原作者[/url]
 [*]xaT2x：[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2990298008]第二任維護者[/url]
 [*]iaman2b：貼圖素材高清重製、測試
-[*]呼吸：打開贓物袋的檢測邏輯
+[*]呼吸：贓物袋打開檢測、Boss 死亡檢測
 [/list]
 
 [hr][/hr]
