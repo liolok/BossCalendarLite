@@ -180,9 +180,6 @@ local keyboard = { -- from STRINGS.UI.CONTROLSSCREEN.INPUTS[1] of strings.lua, n
 local numpad = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Period', 'Divide', 'Multiply', 'Minus', 'Plus' }
 local key_disabled = { description = 'Disabled', data = 'KEY_DISABLED' }
 keys = { key_disabled }
-for i = 1, #mouse do
-  keys[#keys + 1] = { description = mouse[i], data = mouse[i] }
-end
 for i = 1, #keyboard do
   for j = 1, #keyboard[i] do
     local key = keyboard[i][j]
