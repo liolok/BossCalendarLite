@@ -174,12 +174,17 @@ local keyboard = { -- from STRINGS.UI.CONTROLSSCREEN.INPUTS[1] of strings.lua, n
   { 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' },
   { 'Escape', 'Tab', 'CapsLock', 'LShift', 'LCtrl', 'LSuper', 'LAlt' },
   { 'Space', 'RAlt', 'RSuper', 'RCtrl', 'RShift', 'Enter', 'Backspace' },
-  { 'Tilde', 'Minus', 'Equals', 'LeftBracket', 'RightBracket', 'Backslash', 'Semicolon', 'Period', 'Slash' }, -- punctuation
+  { 'BackQuote', 'Minus', 'Equals', 'LeftBracket', 'RightBracket' },
+  { 'Backslash', 'Semicolon', 'Quote', 'Period', 'Slash' }, -- punctuation
   { 'Up', 'Down', 'Left', 'Right', 'Insert', 'Delete', 'Home', 'End', 'PageUp', 'PageDown' }, -- navigation
 }
 local numpad = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Period', 'Divide', 'Multiply', 'Minus', 'Plus' }
+local mouse = { '\238\132\130', '\238\132\131', '\238\132\132' } -- Middle Mouse Button, Mouse Button 4 and 5
 local key_disabled = { description = 'Disabled', data = 'KEY_DISABLED' }
 keys = { key_disabled }
+for i = 1, #mouse do
+  keys[#keys + 1] = { description = mouse[i], data = mouse[i] }
+end
 for i = 1, #keyboard do
   for j = 1, #keyboard[i] do
     local key = keyboard[i][j]
